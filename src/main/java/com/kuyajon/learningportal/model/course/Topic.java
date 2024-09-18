@@ -18,7 +18,7 @@ public class Topic {
     private String content = "";
 
     @Column(nullable = false)
-    private int order;
+    private int sortOrder;
 
     @ManyToOne
     @JoinColumn(name = "lesson_id", nullable = false)

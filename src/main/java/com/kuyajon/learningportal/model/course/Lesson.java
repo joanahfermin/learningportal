@@ -20,7 +20,7 @@ public class Lesson {
     private String description;
 
     @Column(nullable = false)
-    private int order;
+    private int sortOrder;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
