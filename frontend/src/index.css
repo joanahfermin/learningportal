@@ -1,6 +1,6 @@
 @import '~bulmaswatch/cerulean/bulmaswatch.min.css';
 
-/* Custom Styles for Full-Screen Layout and Sticky Footer */
+
 html, body, #root {
   height: 100%;
   margin: 0;
@@ -31,6 +31,7 @@ body, .login-page {
   flex: 1;
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
 }
 
 /*fix nav bug*/
@@ -61,21 +62,6 @@ body, .login-page {
 
 .navbar-burger {
   color: white; /* Ensure burger menu is visible */
-}
-
-.navbar-menu {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.navbar-start, .navbar-end {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-end {
-  margin-left: auto;
 }
 
 .container {
