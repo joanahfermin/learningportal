@@ -13,7 +13,7 @@ const NavBar: React.FC<NavBarProps> = ({ role, setActivePage }) => {
       <div className='container'>
         <div className='navbar-brand'>
           <a href='/' className='navbar-item'>
-            <img src='/logo.svg'alt='Logo'  width='32' height='64'/>
+            <img src='/logowide.webp'alt='Logo'/>
           </a>
           <a
             onClick={() => {
