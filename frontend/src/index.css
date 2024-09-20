@@ -1,68 +1,127 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import '~bulmaswatch/cerulean/bulmaswatch.min.css';
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Custom Styles for Full-Screen Layout and Sticky Footer */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 body {
-  margin: 0;
+  background-color: #f5f5f5;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
+  height: 100%;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+body, .login-page {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.App {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/*fix nav bug*/
+@media screen and (max-width: 768px) {
+  .navbar:not(.is-transparent) .navbar-menu {
+    background-image: none !important;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+}
+.navbar:not(.is-transparent) {
+  background-image: none !important;
+}
+
+/* Ensure the navbar background is consistent and text is visible */
+.navbar, .navbar-menu {
+  background-color: #337ab7 !important; /* Apply the background color to both navbar and menu */
+  color: white;
+}
+
+.navbar-item, .navbar-link {
+  color: white !important;
+  text-decoration: none;
+}
+
+.navbar-item:hover, .navbar-link:hover {
+  background-color: transparent;
+  color: #ddd !important;
+}
+
+.navbar-burger {
+  color: white; /* Ensure burger menu is visible */
+}
+
+.navbar-menu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navbar-start, .navbar-end {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-end {
+  margin-left: auto;
+}
+
+.container {
+  max-width: 960px; /* Adjust this width as necessary */
+  margin: 0 auto;
+  flex: 1;
+  width: 100%;
+}
+
+.section {
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.content-container {
+  padding: 20px;
+}
+
+.login-page {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-box {
+  max-width: 400px;
+  width: 100%;
+  padding: 30px 70px; /* Your updated padding */
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.footer.has-background-primary-blue {
+  background-color: #337ab7;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.login-content {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
