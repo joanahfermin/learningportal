@@ -53,14 +53,14 @@ public class DBBootstrap {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @Value("${spring.profiles.active}")
-    private String activeProfile;
+    @Autowired
+    private ProfileConfig profileConfig;
 
     @EventListener(ApplicationReadyEvent.class)
     public void initializeDatabase() {
-        if ("dev".equals(activeProfile)) {
+        if (profileConfig.getEnvironment() == EEnvironment.DEV) {
             createInitialDataForDev();
-        } else if ("prod".equals(activeProfile)) {
+        } else if (profileConfig.getEnvironment() == EEnvironment.PROD) {
             createInitialDataForProd();
         }
     }

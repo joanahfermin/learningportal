@@ -1,9 +1,9 @@
 package com.kuyajon.learningportal.model.client;
 
-import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Topic;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "topic_progress")
@@ -13,10 +13,12 @@ public class TopicProgress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "enrollment_id", nullable = false)
     private Enrollment enrollment;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "topic_id", nullable = false)
     private Topic topic;

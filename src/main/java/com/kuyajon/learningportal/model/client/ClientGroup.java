@@ -2,6 +2,8 @@ package com.kuyajon.learningportal.model.client;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ public class ClientGroup {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "groups")
     private Set<Client> clients = new HashSet<>();
 }

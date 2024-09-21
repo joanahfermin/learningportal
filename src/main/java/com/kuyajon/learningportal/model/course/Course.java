@@ -2,6 +2,7 @@ package com.kuyajon.learningportal.model.course;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Course {
 
     private String description = "";
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Lesson> lessons = new HashSet<>();
 }

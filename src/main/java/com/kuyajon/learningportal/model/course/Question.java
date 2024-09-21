@@ -2,6 +2,7 @@ package com.kuyajon.learningportal.model.course;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "questions")
@@ -33,6 +34,7 @@ public class Question {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String solution;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "test_id", nullable = false)
     private Test test;

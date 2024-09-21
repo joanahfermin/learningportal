@@ -3,6 +3,8 @@ package com.kuyajon.learningportal.model.client;
 import com.kuyajon.learningportal.model.sys.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // Link to the User entity for login
@@ -24,6 +27,7 @@ public class Client {
     @Column(nullable = false)
     private String lastName;
 
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(
             name = "client_groups",
