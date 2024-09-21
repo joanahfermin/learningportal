@@ -15,7 +15,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/assets/**", "/index.html", "/").permitAll()  // Allow access to static resources including index.html
+                                .requestMatchers("/*.webp", "/assets/**", "/index.html", "/").permitAll()  // Allow access to static resources including index.html
                                 .anyRequest().authenticated() // Require authentication for other requests
                 )
                 .formLogin(withDefaults()) // Configure login form
