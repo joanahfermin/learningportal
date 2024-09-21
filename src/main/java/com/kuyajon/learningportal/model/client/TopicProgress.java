@@ -22,7 +22,7 @@ public class TopicProgress {
     private Topic topic;
 
     @Column(nullable = false)
-    private ProgressStatus status = ProgressStatus.NOT_STARTED;
+    private EProgressStatus status = EProgressStatus.NOT_STARTED;
 
     @Column(nullable = false)
     private boolean hasQuiz;  // Does this lesson has a quiz?

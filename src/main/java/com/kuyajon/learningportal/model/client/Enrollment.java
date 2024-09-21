@@ -24,7 +24,7 @@ public class Enrollment {
     private Course course;
 
     @Column(nullable = false)
-    private ProgressStatus status = ProgressStatus.NOT_STARTED;
+    private EProgressStatus status = EProgressStatus.NOT_STARTED;
 
     @OneToMany(mappedBy = "enrollment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LessonProgress> lessonProgresses = new HashSet<>();

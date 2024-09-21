@@ -1,6 +1,6 @@
 package com.kuyajon.learningportal.model.client;
 
-public enum ProgressStatus {
+public enum EProgressStatus {
     NOT_STARTED(false),
     STARTED(false),
     FAILED(true),
@@ -9,7 +9,7 @@ public enum ProgressStatus {
 
     private final boolean isFinal;
 
-    ProgressStatus(boolean isFinal) {
+    EProgressStatus(boolean isFinal) {
         this.isFinal = isFinal;
     }
 
