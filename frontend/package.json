@@ -8,12 +8,13 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "postbuild": "copyfiles -u 1 dist/**/* ../src/main/resources/static/"
+    "postbuild": "del-cli --force ../src/main/resources/static/assets/*.js && del-cli --force ../src/main/resources/static/assets/*.css && copyfiles -u 1 dist/**/* ../src/main/resources/static/"
   },
   "dependencies": {
     "axios": "^1.7.7",
     "bulma": "^1.0.2",
     "bulmaswatch": "^0.8.1",
+    "frontend": "file:",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2"
@@ -28,6 +29,7 @@
     "@typescript-eslint/parser": "^8.6.0",
     "@vitejs/plugin-react": "^4.3.1",
     "copyfiles": "^2.4.1",
+    "del-cli": "^5.1.0",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
