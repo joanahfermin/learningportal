@@ -6,28 +6,52 @@ import com.kuyajon.learningportal.repository.course.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/courses")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
 
     @GetMapping
     public List<CourseDTO> getAllCourses() {
+        List<Course> courses = courseRepository.findAll();
+        List<CourseDTO> result = new ArrayList<CourseDTO>();
+        for(Course course:courses) {
+            CourseDTO dto = convertToDTO(course);
+            /*new CourseDTO();
+            dto.setId(course.getId());
+            dto.setName(course.getName());
+            dto.setDescription(course.getDescription());*/
+            result.add(dto);
+        }
+        return result;
+        /*
         return courseRepository.findAll().stream()
             .map(this::convertToDTO)
-            .collect(Collectors.toList());
+            .collect(Collectors.toList());*/
     }
 
     @GetMapping("/{id}")
     public Optional<CourseDTO> getCourseById(@PathVariable Long id) {
-        return courseRepository.findById(id)
-            .map(this::convertToDTO);
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            CourseDTO result = convertToDTO(course);
+//            result.setId(course.getId());
+//            result.setName(course.getName());
+//            result.setDescription(course.getDescription());
+            return Optional.of(result);
+        } else {
+            return Optional.empty();
+        }
+        /*return courseRepository.findById(id)
+            .map(this::convertToDTO); */
     }
 
     @PostMapping
@@ -39,10 +63,16 @@ public class CourseController {
 
     @PutMapping("/{id}")
     public CourseDTO updateCourse(@PathVariable Long id, @RequestBody CourseDTO courseDTO) {
-        Course course = convertToEntity(courseDTO);
-        course.setId(id);
-        course = courseRepository.save(course);
-        return convertToDTO(course);
+        Optional<Course> courseOptional = courseRepository.findById(id);;
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            course.setDescription(courseDTO.getDescription());
+            course.setName(courseDTO.getName());
+            course = courseRepository.save(course);
+            return convertToDTO(course);
+        } else {
+            throw new IllegalArgumentException("Course ID must not be null");
+        }
     }
 
     @DeleteMapping("/{id}")
