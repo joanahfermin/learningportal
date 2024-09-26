@@ -6,6 +6,8 @@ import com.kuyajon.learningportal.repository.course.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CourseService {
 
@@ -91,5 +93,12 @@ public class CourseService {
 
     public void deleteTopicById(Long id){
         topicRepository.deleteById(id);
+    }
+
+
+
+
+    public List<Lesson> getLessonsByCourseId(Long courseId){
+        return lessonRepository.findByCourseId(courseId);
     }
 }
