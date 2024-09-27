@@ -65,6 +65,22 @@ public class LessonController {
         return result;
     }
 
+    /*
+    maps HTTP POST requests to this method.
+    create a lesson.
+     */
+    @PostMapping
+    private LessonDTO createLesson(@RequestBody LessonDTO lessonDTO){
+        Optional<Course> courseOptional = courseRepository.findById(lessonDTO.getCourseId());
+        Course course = courseOptional.get();
+        Lesson lesson = new Lesson();
+        lesson.setName(lessonDTO.getName());
+        lesson.setDescription(lessonDTO.getDescription());
+        lesson.setCourse(course);
+        Lesson savedLesson = lessonRepository.save(lesson);
+        return convertToLesson(savedLesson);
+    }
+
     @PutMapping("/lessons/{id}")
     public LessonDTO updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
         Optional<Lesson> lessonOptional = lessonRepository.findById(id);;
@@ -78,23 +94,7 @@ public class LessonController {
             throw new IllegalArgumentException("Course ID must not be null");
         }
     }
-
-    /*
-    maps HTTP POST requests to this method.
-    create a lesson.
-     */
-    @PostMapping
-    private LessonDTO createLesson(@RequestBody LessonDTO lessonDTO){
-        Optional<Course> courseOptional = courseRepository.findById(lessonDTO.getCourseId());
-        Course course = courseOptional.get();
-        Lesson lesson = new Lesson();
-        lesson.setName(lessonDTO.getName());
-        lesson.setDescription(lessonDTO.getDescription());
-        lesson.setCourse(course);
-        lessonRepository.save(lesson);
-        return lessonDTO;
-    }
-
+    
     /*
     used to handle HTTP DELETE requests in a RESTful web service.
     delete the lesson based on lesson ID.
