@@ -3,6 +3,7 @@ package com.kuyajon.learningportal.controllers.course;
 import com.kuyajon.learningportal.dto.course.CourseDTO;
 import com.kuyajon.learningportal.model.course.Course;
 import com.kuyajon.learningportal.repository.course.CourseRepository;
+import com.kuyajon.learningportal.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CourseService courseService;
 
     @GetMapping
     public List<CourseDTO> getAllCourses() {
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseService.getAllCourse();
         List<CourseDTO> result = new ArrayList<CourseDTO>();
         for(Course course:courses) {
             CourseDTO dto = convertToDTO(course);
@@ -39,7 +42,8 @@ public class CourseController {
 
     @GetMapping("/{id}")
     public Optional<CourseDTO> getCourseById(@PathVariable Long id) {
-        Optional<Course> courseOptional = courseRepository.findById(id);
+//        Optional<Course> courseOptional = courseRepository.findById(id);
+        Optional<Course> courseOptional = courseService.getCourseByID(id);
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             CourseDTO result = convertToDTO(course);
@@ -63,7 +67,7 @@ public class CourseController {
 
     @PutMapping("/{id}")
     public CourseDTO updateCourse(@PathVariable Long id, @RequestBody CourseDTO courseDTO) {
-        Optional<Course> courseOptional = courseRepository.findById(id);;
+        Optional<Course> courseOptional = courseService.getCourseByID(id);
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();
             course.setDescription(courseDTO.getDescription());
@@ -77,7 +81,7 @@ public class CourseController {
 
     @DeleteMapping("/{id}")
     public void deleteCourse(@PathVariable Long id) {
-        courseRepository.deleteById(id);
+        courseService.deleteCourseById(id);
     }
 
     private CourseDTO convertToDTO(Course course) {

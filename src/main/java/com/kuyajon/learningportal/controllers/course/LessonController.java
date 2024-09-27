@@ -35,7 +35,7 @@ public class LessonController {
      */
     @GetMapping("/lessons/{id}")
     public Optional<LessonDTO> getLessonById(@PathVariable Long courseId, @PathVariable Long id) {
-        Optional<Lesson> lessonOptional = lessonRepository.findById(id);
+        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
 
         if (lessonOptional.isPresent()) {
             Lesson lesson = lessonOptional.get();
@@ -71,39 +71,40 @@ public class LessonController {
      */
     @PostMapping
     private LessonDTO createLesson(@RequestBody LessonDTO lessonDTO){
-        Optional<Course> courseOptional = courseRepository.findById(lessonDTO.getCourseId());
+        Optional<Course> courseOptional = courseService.getCourseByID(lessonDTO.getCourseId());
+
         Course course = courseOptional.get();
         Lesson lesson = new Lesson();
         lesson.setName(lessonDTO.getName());
         lesson.setDescription(lessonDTO.getDescription());
         lesson.setCourse(course);
-        Lesson savedLesson = lessonRepository.save(lesson);
+        Lesson savedLesson = courseService.saveOrUpdateLesson(lesson);
         return convertToLesson(savedLesson);
     }
 
     @PutMapping("/lessons/{id}")
     public LessonDTO updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
-        Optional<Lesson> lessonOptional = lessonRepository.findById(id);;
+        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);;
         if (lessonOptional.isPresent()) {
             Lesson lesson = lessonOptional.get();
             lesson.setDescription(lessonDTO.getDescription());
             lesson.setName(lessonDTO.getName());
-            lesson = lessonRepository.save(lesson);
+            lesson = courseService.saveOrUpdateLesson(lesson);
             return convertToLesson(lesson);
         } else {
             throw new IllegalArgumentException("Course ID must not be null");
         }
     }
-    
+
     /*
     used to handle HTTP DELETE requests in a RESTful web service.
     delete the lesson based on lesson ID.
      */
     @DeleteMapping("/lessons/{id}")
     public void deleteCourseById(@PathVariable Long id){
-        Optional<Lesson> lessonOptional = lessonRepository.findById(id);
+        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
         if (lessonOptional.isPresent()) {
-            lessonRepository.deleteById(id);
+            courseService.deleteLessonById(id);
         } else {
             throw new IllegalArgumentException("No lesson ID found.");
         }

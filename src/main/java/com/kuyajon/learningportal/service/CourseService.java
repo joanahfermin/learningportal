@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseService {
@@ -27,14 +28,18 @@ public class CourseService {
     private TopicRepository topicRepository;
 
 
-
-    //Retrieve course by id.
-    public Course getCourseByID(Long id){
-        return courseRepository.findById(id).get();
+    //Retrieve all entity course.
+    public List<Course> getAllCourse(){
+        return courseRepository.findAll();
     }
 
-    public Lesson getLessonByID(Long id){
-        return lessonRepository.findById(id).get();
+    //Retrieve course by id.
+    public Optional<Course> getCourseByID(Long id){
+        return Optional.of(courseRepository.findById(id).get());
+    }
+
+    public Optional<Lesson> getLessonByID(Long id){
+        return Optional.of(lessonRepository.findById(id).get());
     }
 
     public Question getQuestionByID(Long id){
