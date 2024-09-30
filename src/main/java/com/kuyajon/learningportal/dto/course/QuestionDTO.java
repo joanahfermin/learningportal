@@ -11,7 +11,7 @@ public class QuestionDTO {
     private String choiceC;
     private String choiceD;
 
-    private String questionTest;
+    private String questionText;
     private String solution;
     private Long testId;
 }

@@ -54,8 +54,8 @@ public class CourseService {
         return Optional.of(questionRepository.findById(id).get());
     }
 
-    public Test getTestByID(Long id){
-        return testRepository.findById(id).get();
+    public Optional<Test> getTestByID(Long id){
+        return Optional.of(testRepository.findById(id).get());
     }
 
     public Topic getTopicID(Long id){

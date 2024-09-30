@@ -1,7 +1,9 @@
 package com.kuyajon.learningportal.controllers.course;
 
 import com.kuyajon.learningportal.dto.course.QuestionDTO;
+import com.kuyajon.learningportal.model.course.AnswerChoice;
 import com.kuyajon.learningportal.model.course.Question;
+import com.kuyajon.learningportal.model.course.Test;
 import com.kuyajon.learningportal.repository.course.QuestionRepository;
 import com.kuyajon.learningportal.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,56 @@ public class QuestionController {
         return result;
     }
 
+    @PostMapping("/test/{testId}")
+    private QuestionDTO createQuestion(@RequestBody QuestionDTO questionDTO){
+        Optional<Test> testOptional = courseService.getTestByID(questionDTO.getTestId());
+
+        Test retrievedTest = testOptional.get();
+        Question question = new Question();
+        question.setId(questionDTO.getId());
+        question.setAnswer(AnswerChoice.valueOf(questionDTO.getAnswer()));
+        question.setChoiceA(questionDTO.getChoiceA());
+        question.setChoiceB(questionDTO.getChoiceB());
+        question.setChoiceC(questionDTO.getChoiceC());
+        question.setChoiceD(questionDTO.getChoiceD());
+        question.setQuestionText(questionDTO.getQuestionText());
+        question.setSolution(questionDTO.getSolution());
+        question.setTest(retrievedTest);
+        Question savedQuestion = courseService.saveOrUpdateQuestion(question);
+
+        return convertToDTO(savedQuestion);
+    }
+
+    @PutMapping("/{id}")
+    public QuestionDTO updateQuestion(@PathVariable Long id, @RequestBody QuestionDTO questionDTO){
+        Optional<Question> questionOptional = courseService.getQuestionByID(id);
+
+        if (questionOptional.isPresent()) {
+            Question question = questionOptional.get();
+            question.setAnswer(AnswerChoice.valueOf(questionDTO.getAnswer()));
+            question.setChoiceA(questionDTO.getChoiceA());
+            question.setChoiceB(questionDTO.getChoiceB());
+            question.setChoiceC(questionDTO.getChoiceC());
+            question.setChoiceD(questionDTO.getChoiceD());
+            question.setQuestionText(questionDTO.getQuestionText());
+            question.setSolution(questionDTO.getSolution());
+            question = courseService.saveOrUpdateQuestion(question);
+            return convertToDTO(question);
+        } else {
+            throw new IllegalArgumentException("Test ID must not be null");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteQuestion(@PathVariable Long id){
+        Optional<Question> questionOptional = courseService.getQuestionByID(id);
+        if (questionOptional.isPresent()) {
+            courseService.deleteQuestionById(id);
+        } else {
+            throw new IllegalArgumentException("No question ID found.");
+        }
+    }
+
     private QuestionDTO convertToDTO(Question question){
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setId(question.getId());
@@ -77,7 +129,7 @@ public class QuestionController {
         questionDTO.setChoiceB(question.getChoiceB());
         questionDTO.setChoiceC(question.getChoiceC());
         questionDTO.setChoiceD(question.getChoiceD());
-        questionDTO.setQuestionTest(question.getQuestionText());
+        questionDTO.setQuestionText(question.getQuestionText());
         questionDTO.setSolution(question.getSolution());
         questionDTO.setTestId(question.getId());
         return questionDTO;
