@@ -23,13 +23,6 @@ public class QuestionController {
     @Autowired
     private CourseService courseService;
 
-    //getAllQuestions - done
-    //getQuestionById - done
-    //getAllQuestionsByTestId - done
-    //createQuestion
-    //updateQuestion
-    //deleteQuestion
-
     @GetMapping
     public List<QuestionDTO> getAllQuestions (){
         List<Question> questions = courseService.getAllQuestion();
@@ -131,7 +124,14 @@ public class QuestionController {
         questionDTO.setChoiceD(question.getChoiceD());
         questionDTO.setQuestionText(question.getQuestionText());
         questionDTO.setSolution(question.getSolution());
-        questionDTO.setTestId(question.getId());
+//        questionDTO.setTestId(question.getTest().getId());
+
+        if (question.getTest() != null && question.getTest().getId() != null) {
+            questionDTO.setTestId(question.getTest().getId());
+        } else {
+            questionDTO.setTestId(null);
+        }
+
         return questionDTO;
     }
 

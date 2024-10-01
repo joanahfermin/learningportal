@@ -41,6 +41,10 @@ public class CourseService {
         return questionRepository.findAll();
     }
 
+    public List<Test> getAllTest(){
+        return testRepository.findAll();
+    }
+
     //Retrieve course by id.
     public Optional<Course> getCourseByID(Long id){
         return Optional.of(courseRepository.findById(id).get());
