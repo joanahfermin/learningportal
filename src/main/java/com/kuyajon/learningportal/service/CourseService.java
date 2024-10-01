@@ -45,6 +45,7 @@ public class CourseService {
         return testRepository.findAll();
     }
 
+
     //Retrieve course by id.
     public Optional<Course> getCourseByID(Long id){
         return Optional.of(courseRepository.findById(id).get());
@@ -65,6 +66,8 @@ public class CourseService {
     public Topic getTopicID(Long id){
         return topicRepository.findById(id).get();
     }
+
+
 
 
 
@@ -121,5 +124,13 @@ public class CourseService {
 
     public List<Question> getQuestionsByTestId(Long testId){
         return questionRepository.findByTestId(testId);
+    }
+
+    public List<Test> getTestByLessonId(Long lessonId){
+        return testRepository.findTestByLessonId(lessonId);
+    }
+
+    public List<Test> getTestByTopicId(Long topicId){
+        return testRepository.findTestByTopicId(topicId);
     }
 }

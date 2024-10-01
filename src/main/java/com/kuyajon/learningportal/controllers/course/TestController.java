@@ -1,6 +1,7 @@
 package com.kuyajon.learningportal.controllers.course;
 
 import com.kuyajon.learningportal.dto.course.TestDTO;
+import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Test;
 import com.kuyajon.learningportal.repository.course.TestRepository;
 import com.kuyajon.learningportal.service.CourseService;
@@ -23,8 +24,8 @@ public class TestController {
 
     //getAllTest - done
     //getTestById - done 
-    //getAllTestByLessonId
-    //getAllTestByTopicId
+    //getAllTestByLessonId - done
+    //getAllTestByTopicId - done
     //createTest
     //updateTest
     //deleteTest
@@ -53,6 +54,40 @@ public class TestController {
             throw new IllegalArgumentException("Test ID must not be null");
         }
     }
+
+    @GetMapping("/lesson/{lessonId}")
+    public List<TestDTO> getAllTestByLessonId (@PathVariable Long lessonId){
+        List<Test> tests = courseService.getTestByLessonId(lessonId);
+        List<TestDTO> result = new ArrayList<TestDTO>();
+
+        if (tests.isEmpty()) {
+            throw new IllegalArgumentException("Lesson ID must not be null");
+        }
+
+        for (Test test : tests) {
+            TestDTO testDTO = convertToDTO(test);
+            result.add(testDTO);
+        }
+
+        return result;
+    }
+
+    @GetMapping("/topic/{topicId}")
+    public List<TestDTO> getAllTestByTopicId (@PathVariable Long topicId){
+        List<Test> topics = courseService.getTestByLessonId(topicId);
+        List<TestDTO> result = new ArrayList<TestDTO>();
+
+        if (topics.isEmpty()) {
+            throw new IllegalArgumentException("Topic ID must not be null");
+        }
+
+        for (Test test : topics) {
+            TestDTO testDTO = convertToDTO(test);
+            result.add(testDTO);
+        }
+        return result;
+    }
+
 
     private TestDTO convertToDTO(Test test){
         TestDTO testDTO = new TestDTO();
