@@ -70,16 +70,20 @@ public class LessonController {
     create a lesson.
      */
     @PostMapping
-    private LessonDTO createLesson(@RequestBody LessonDTO lessonDTO){
+    public LessonDTO createLesson(@RequestBody LessonDTO lessonDTO){
         Optional<Course> courseOptional = courseService.getCourseByID(lessonDTO.getCourseId());
 
-        Course course = courseOptional.get();
-        Lesson lesson = new Lesson();
-        lesson.setName(lessonDTO.getName());
-        lesson.setDescription(lessonDTO.getDescription());
-        lesson.setCourse(course);
-        Lesson savedLesson = courseService.saveOrUpdateLesson(lesson);
-        return convertToDTO(savedLesson);
+        if (courseOptional.isPresent()) {
+            Course course = courseOptional.get();
+            Lesson lesson = new Lesson();
+            lesson.setName(lessonDTO.getName());
+            lesson.setDescription(lessonDTO.getDescription());
+            lesson.setCourse(course);
+            Lesson savedLesson = courseService.saveOrUpdateLesson(lesson);
+            return convertToDTO(savedLesson);
+        } else {
+            throw new IllegalArgumentException("Course ID must not be null");
+        }
     }
 
     @PutMapping("/lessons/{id}")

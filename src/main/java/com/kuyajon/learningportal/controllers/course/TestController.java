@@ -1,8 +1,10 @@
 package com.kuyajon.learningportal.controllers.course;
 
 import com.kuyajon.learningportal.dto.course.TestDTO;
+import com.kuyajon.learningportal.model.course.Course;
 import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Test;
+import com.kuyajon.learningportal.model.course.Topic;
 import com.kuyajon.learningportal.repository.course.TestRepository;
 import com.kuyajon.learningportal.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,6 @@ public class TestController {
             TestDTO testDTO = convertToDTO(test);
             result.add(testDTO);
         }
-
         return result;
     }
 
@@ -85,9 +86,33 @@ public class TestController {
         return result;
     }
 
-    //createTest
-    //updateTest
+    //createTest - TO CONFIRM IF LESSON/TOPIC ID MUST BE REQUIRED
+    //updateTest - TO CONFIRM IF LESSON/TOPIC ID MUST BE REQUIRED
     //deleteTest - done
+
+    @PostMapping()
+    public TestDTO createTest(@RequestBody TestDTO testDTO){
+        Optional<Lesson> lessonOptional = courseService.getLessonByID(testDTO.getLessonId());
+        Optional<Topic> topicOptional = courseService.getTopicByID(testDTO.getTopicId());
+
+        if (lessonOptional.isPresent()) {
+            Lesson lesson = lessonOptional.get();
+            Topic topic = topicOptional.get();
+            Test test = new Test();
+            test.setName(testDTO.getName());
+            test.setLesson(lesson);
+            test.setTopic(topic);
+            return convertToDTO(test);
+        } else {
+            throw new IllegalArgumentException("Lesson/Topic ID must not be null");
+        }
+    }
+
+
+    @PutMapping("/{id}")
+    public TestDTO updateTest(@PathVariable Long id, @RequestBody TestDTO testDTO){
+        return null;
+    }
 
     @DeleteMapping("/{id}")
     public void deleteTest(@PathVariable Long id){
@@ -116,7 +141,6 @@ public class TestController {
         } else {
             testDTO.setTopicId(null); // Handle case where topic or topic.getId() is null
         }
-
         return testDTO;
     }
 }

@@ -24,10 +24,6 @@ public class TopicController {
     @Autowired
     private CourseService courseService;
 
-    //getAllTopic - done
-    //getTopicById - done
-    //getAllTopicByLessonId - done
-
     @GetMapping()
     public List<TopicDTO> getAllTopic(){
         List<Topic> topics = courseService.getAllTopic();
@@ -69,10 +65,6 @@ public class TopicController {
         return result;
     }
 
-    //createTopic - done 
-    //updateTopic
-    //deleteTopic
-
     @PostMapping()
     public TopicDTO createTopic(@RequestBody TopicDTO topicDTO){
         Optional<Lesson> lessonOptional = courseService.getLessonByID(topicDTO.getLessonId());
@@ -85,9 +77,33 @@ public class TopicController {
             topic.setLesson(lesson);
             Topic topicSaved = courseService.saveOrUpdateTopic(topic);
             return convertToDTO(topicSaved);
+        } else {
+            throw new IllegalArgumentException("Lesson ID must not be null");
         }
+    }
 
-        return null;
+    @PutMapping("/{id}")
+    public TopicDTO updateTopic(@PathVariable Long id, @RequestBody TopicDTO topicDTO){
+        Optional<Topic> topicOptional = courseService.getTopicByID(id);
+        if (topicOptional.isPresent()) {
+            Topic topic = topicOptional.get();
+            topic.setContent(topicDTO.getContent());
+            topic.setName(topicDTO.getName());
+            topic = courseService.saveOrUpdateTopic(topic);
+            return convertToDTO(topic);
+        } else {
+            throw new IllegalArgumentException("Topic ID must not be null");
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteTopic(@PathVariable Long id){
+        Optional<Topic> topicOptional = courseService.getTopicByID(id);
+        if (topicOptional.isPresent()) {
+            courseService.deleteTopicById(id);
+        } else {
+            throw new IllegalArgumentException("No topic ID found.");
+        }
     }
 
     private TopicDTO convertToDTO(Topic topic){

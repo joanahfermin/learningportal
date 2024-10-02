@@ -65,7 +65,7 @@ public class QuestionController {
     }
 
     @PostMapping("/test/{testId}")
-    private QuestionDTO createQuestion(@RequestBody QuestionDTO questionDTO){
+    public QuestionDTO createQuestion(@RequestBody QuestionDTO questionDTO){
         Optional<Test> testOptional = courseService.getTestByID(questionDTO.getTestId());
 
         Test retrievedTest = testOptional.get();
@@ -131,7 +131,6 @@ public class QuestionController {
         } else {
             questionDTO.setTestId(null);
         }
-
         return questionDTO;
     }
 
