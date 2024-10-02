@@ -26,9 +26,6 @@ public class TestController {
     //getTestById - done 
     //getAllTestByLessonId - done
     //getAllTestByTopicId - done
-    //createTest
-    //updateTest
-    //deleteTest
 
     @GetMapping
     public List<TestDTO> getAllTest(){
@@ -88,6 +85,19 @@ public class TestController {
         return result;
     }
 
+    //createTest
+    //updateTest
+    //deleteTest - done 
+
+    @DeleteMapping("/{id}")
+    public void deleteTest(@PathVariable Long id){
+        Optional<Test> test = courseService.getTestByID(id);
+        if (test.isPresent()) {
+            courseService.deleteTestById(id);
+        } else {
+            throw new IllegalArgumentException("No test ID found.");
+        }
+    }
 
     private TestDTO convertToDTO(Test test){
         TestDTO testDTO = new TestDTO();
