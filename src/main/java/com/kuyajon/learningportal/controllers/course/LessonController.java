@@ -39,7 +39,7 @@ public class LessonController {
 
         if (lessonOptional.isPresent()) {
             Lesson lesson = lessonOptional.get();
-            LessonDTO lessonDTO = convertToLesson(lesson);
+            LessonDTO lessonDTO = convertToDTO(lesson);
             return Optional.of(lessonDTO);
         } else {
             throw new IllegalArgumentException("Lesson ID must not be null");
@@ -59,7 +59,7 @@ public class LessonController {
             throw new IllegalArgumentException("Lesson ID must not be null");
         }
         for (Lesson lesson:lessons){
-            LessonDTO dto = convertToLesson(lesson);
+            LessonDTO dto = convertToDTO(lesson);
             result.add(dto);
         }
         return result;
@@ -79,7 +79,7 @@ public class LessonController {
         lesson.setDescription(lessonDTO.getDescription());
         lesson.setCourse(course);
         Lesson savedLesson = courseService.saveOrUpdateLesson(lesson);
-        return convertToLesson(savedLesson);
+        return convertToDTO(savedLesson);
     }
 
     @PutMapping("/lessons/{id}")
@@ -90,7 +90,7 @@ public class LessonController {
             lesson.setDescription(lessonDTO.getDescription());
             lesson.setName(lessonDTO.getName());
             lesson = courseService.saveOrUpdateLesson(lesson);
-            return convertToLesson(lesson);
+            return convertToDTO(lesson);
         } else {
             throw new IllegalArgumentException("Course ID must not be null");
         }
@@ -111,7 +111,7 @@ public class LessonController {
     }
 
     // converts lesson to lessonDTO
-    public LessonDTO convertToLesson(Lesson lesson){
+    public LessonDTO convertToDTO(Lesson lesson){
         LessonDTO lessonDTO = new LessonDTO();
         lessonDTO.setId(lesson.getId());
         lessonDTO.setName(lesson.getName());

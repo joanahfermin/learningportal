@@ -71,7 +71,7 @@ public class TestController {
 
     @GetMapping("/topic/{topicId}")
     public List<TestDTO> getAllTestByTopicId (@PathVariable Long topicId){
-        List<Test> topics = courseService.getTestByLessonId(topicId);
+        List<Test> topics = courseService.getTestByTopicId(topicId);
         List<TestDTO> result = new ArrayList<TestDTO>();
 
         if (topics.isEmpty()) {
@@ -87,7 +87,7 @@ public class TestController {
 
     //createTest
     //updateTest
-    //deleteTest - done 
+    //deleteTest - done
 
     @DeleteMapping("/{id}")
     public void deleteTest(@PathVariable Long id){
