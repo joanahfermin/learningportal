@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import {authService} from '../../services/AuthService';
+import { setToken as setMemoryToken } from '../../services/tokenService';
 
 type AuthContextType = {
   username: string | null;
@@ -19,13 +20,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [username, setUsername] = useState<string | null>(null);
   const [role, setRole] = useState<'ADMIN' | 'CLIENT' | null>(null);
   const [token, setToken] = useState<string | null>(null);
-
+  
   const login = async (username: string, password: string) => {
     try {
       const response = await authService.login(username, password);
       setUsername(response.username);
       setRole(response.role);
       setToken(response.token);
+      setMemoryToken(response.token);
     } catch (error) {
       console.error(error);
       throw error;
@@ -36,6 +38,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setUsername(null);
     setRole(null);
     setToken(null);
+    setMemoryToken(null);
   };
 
   return (

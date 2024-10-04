@@ -9,7 +9,7 @@ const Admin: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log('Current location:', location.pathname);
+    //console.log('Current location:', location.pathname);
   }, [location]);
 
   return (
