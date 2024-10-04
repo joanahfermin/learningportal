@@ -1,109 +1,81 @@
-import React, { useEffect, useState } from "react";
-import axios from '../../api/axiosConfig'; // Import the configured axios instance
-import { Course } from "../../model/Course";
+import React, { useState, useEffect } from 'react';
+import CourseService from '../../services/CourseService';
+import { Course } from '../..//model/Course';
+import ConfirmDialog from '../../components/ConfirmDialog'; // Update the path as needed
 
 const CoursePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [newCourse, setNewCourse] = useState<Course>({ id: 0, name: '', description: '' });
-  const [editCourse, setEditCourse] = useState<Course | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<Partial<Course> | null>(null);
+  const [isModalActive, setModalActive] = useState(false);
+  const [isConfirmDelete, setIsConfirmDelete] = useState(false);
+  const [courseToDelete, setCourseToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
   const fetchCourses = async () => {
-    try {
-      const response = await axios.get('/courses');
-      setCourses(response.data);
-    } catch (error) {
-      console.error('Error fetching courses', error);
-    }
+    const data = await CourseService.getAllCourses();
+    setCourses(data);
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target;
-    if (editCourse) {
-      setEditCourse({ ...editCourse, [name]: value });
-    } else {
-      setNewCourse({ ...newCourse, [name]: value });
-    }
+  const openModal = (course?: Course) => {
+    setSelectedCourse(course || { name: '', description: '' });
+    setModalActive(true);
   };
 
-  const handleCourseSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (editCourse) {
-      try {
-        await axios.put(`/courses/${editCourse.id}`, editCourse);
-        fetchCourses();
-        setEditCourse(null);
-      } catch (error) {
-        console.error('Error updating course', error);
+  const closeModal = () => {
+    setModalActive(false);
+    setSelectedCourse(null);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setSelectedCourse((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const saveCourse = async () => {
+    if (selectedCourse) {
+      if (selectedCourse.id) {
+        await CourseService.updateCourse(selectedCourse.id, selectedCourse as Course);
+      } else {
+        await CourseService.createCourse(selectedCourse as Omit<Course, 'id'>);
       }
-    } else {
-      try {
-        await axios.post('/courses', newCourse);
-        fetchCourses();
-        setNewCourse({ id: 0, name: '', description: '' });
-      } catch (error) {
-        console.error('Error creating course', error);
-      }
-    }
-  };
-
-  const handleEdit = (course: Course) => {
-    setEditCourse(course);
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      await axios.delete(`/courses/${id}`);
+      closeModal();
       fetchCourses();
-    } catch (error) {
-      console.error('Error deleting course', error);
     }
+  };
+
+  const requestDeleteCourse = (id: number) => {
+    setIsConfirmDelete(true);
+    setCourseToDelete(id);
+  };
+
+  const confirmDeleteCourse = async () => {
+    if (courseToDelete !== null) {
+      await CourseService.deleteCourse(courseToDelete);
+      setIsConfirmDelete(false);
+      setCourseToDelete(null);
+      fetchCourses();
+    }
+  };
+
+  const cancelDeleteCourse = () => {
+    setIsConfirmDelete(false);
+    setCourseToDelete(null);
   };
 
   return (
     <div className="container">
-      <h1 className="title">Course Management</h1>
-      <form onSubmit={handleCourseSubmit}>
-        <div className="field">
-          <label className="label">Name</label>
-          <div className="control">
-            <input
-              className="input"
-              type="text"
-              name="name"
-              value={editCourse ? editCourse.name : newCourse.name}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-        </div>
-        <div className="field">
-          <label className="label">Description</label>
-          <div className="control">
-            <textarea
-              className="textarea"
-              name="description"
-              value={editCourse ? editCourse.description : newCourse.description}
-              onChange={handleInputChange}
-            ></textarea>
-          </div>
-        </div>
-        <div className="control">
-          <button className="button is-primary" type="submit">
-            {editCourse ? 'Update Course' : 'Create Course'}
-          </button>
-        </div>
-      </form>
-
-      <table className="table is-fullwidth is-striped">
+      <h1 className="title">Courses</h1>
+      <button className="button is-primary" onClick={() => openModal()}>Add Course</button>
+      
+      <table className="table is-fullwidth mt-4">
         <thead>
           <tr>
-            <th>Name</th>
+            <th style={{width: 250}}>Name</th>
             <th>Description</th>
-            <th>Actions</th>
+            <th style={{width: 200}}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -112,17 +84,61 @@ const CoursePage: React.FC = () => {
               <td>{course.name}</td>
               <td>{course.description}</td>
               <td>
-                <button className="button is-small is-info" onClick={() => handleEdit(course)}>
-                  Edit
-                </button>
-                <button className="button is-small is-danger" onClick={() => handleDelete(course.id)}>
-                  Delete
-                </button>
+                <button className="button is-small is-info mr-2" onClick={() => openModal(course)}>Edit</button>
+                <button className="button is-small is-danger" onClick={() => requestDeleteCourse(course.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {isModalActive && selectedCourse && (
+        <div className={`modal ${isModalActive ? 'is-active' : ''}`}>
+          <div className="modal-background" onClick={closeModal}></div>
+          <div className="modal-card">
+            <header className="modal-card-head">
+              <p className="modal-card-title">{selectedCourse.id ? 'Edit Course' : 'Add Course'}</p>
+              <button className="delete" aria-label="close" onClick={closeModal}></button>
+            </header>
+            <section className="modal-card-body">
+              <div className="field">
+                <label className="label">Name</label>
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    name="name"
+                    value={selectedCourse.name || ''}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              </div>
+              <div className="field">
+                <label className="label">Description</label>
+                <div className="control">
+                  <textarea
+                    className="textarea"
+                    name="description"
+                    value={selectedCourse.description || ''}
+                    onChange={handleInputChange}
+                  ></textarea>
+                </div>
+              </div>
+            </section>
+            <footer className="modal-card-foot">
+              <button className="button is-success" onClick={saveCourse}>Save changes</button>
+              <button className="button" onClick={closeModal}>Cancel</button>
+            </footer>
+          </div>
+        </div>
+      )}
+
+      <ConfirmDialog
+        message="Are you sure you want to delete this course?"
+        isActive={isConfirmDelete}
+        onConfirm={confirmDeleteCourse}
+        onCancel={cancelDeleteCourse}
+      />
     </div>
   );
 };

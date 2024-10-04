@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/courses/{courseId}")
+@RequestMapping("/api/courses/{courseId}/lessons")
 @CrossOrigin(origins = "*")
 public class LessonController {
 
@@ -33,7 +33,7 @@ public class LessonController {
     used to handle HTTP GET requests in a RESTful web service using the provided id.
     gets the lesson from the db based on the provided id.
      */
-    @GetMapping("/lessons/{id}")
+    @GetMapping("/{id}")
     public Optional<LessonDTO> getLessonById(@PathVariable Long courseId, @PathVariable Long id) {
         Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
 
@@ -50,7 +50,7 @@ public class LessonController {
     used to handle HTTP GET requests in a RESTful web service.
     gets all the lesson from the db based on course ID.
      */
-    @GetMapping("/lessons")
+    @GetMapping
     public List<LessonDTO> getAllLessonByCourseId(@PathVariable Long courseId) {
         List<Lesson> lessons = courseService.getLessonsByCourseId(courseId);;
         List<LessonDTO> result = new ArrayList<LessonDTO>();
@@ -86,7 +86,7 @@ public class LessonController {
         }
     }
 
-    @PutMapping("/lessons/{id}")
+    @PutMapping("/{id}")
     public LessonDTO updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
         Optional<Lesson> lessonOptional = courseService.getLessonByID(id);;
         if (lessonOptional.isPresent()) {
@@ -104,7 +104,7 @@ public class LessonController {
     used to handle HTTP DELETE requests in a RESTful web service.
     delete the lesson based on lesson ID.
      */
-    @DeleteMapping("/lessons/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCourseById(@PathVariable Long id){
         Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
         if (lessonOptional.isPresent()) {
