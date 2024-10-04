@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import CourseService from '../../services/CourseService';
 import { Course } from '../..//model/Course';
 import ConfirmDialog from '../../components/ConfirmDialog'; // Update the path as needed
+import { useNavigate } from 'react-router-dom';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faBook } from '@fortawesome/free-solid-svg-icons';
 
 const CoursePage: React.FC = () => {
+  const navigate = useNavigate();
+
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourse, setSelectedCourse] = useState<Partial<Course> | null>(null);
   const [isModalActive, setModalActive] = useState(false);
@@ -84,8 +90,15 @@ const CoursePage: React.FC = () => {
               <td>{course.name}</td>
               <td>{course.description}</td>
               <td>
-                <button className="button is-small is-info mr-2" onClick={() => openModal(course)}>Edit</button>
-                <button className="button is-small is-danger" onClick={() => requestDeleteCourse(course.id)}>Delete</button>
+                <button className="button is-small is-info mr-2" onClick={() => openModal(course)} title="Edit">
+                  <FontAwesomeIcon icon={faEdit} />
+                </button>
+                <button className="button is-small is-danger" onClick={() => requestDeleteCourse(course.id)} title="Delete">
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+                <button className="button is-small is-primary" onClick={() => navigate(`/admin-course/${course.id}/lessons`)} title="Lessons">
+                  <FontAwesomeIcon icon={faBook} />
+                </button>
               </td>
             </tr>
           ))}

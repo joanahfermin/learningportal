@@ -5,6 +5,7 @@ import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
 import CoursePage from './pages/admin/CoursePage';
 import ClientManagementPage from './pages/admin/ClientManagementPage';
+import LessonPage from './pages/admin/LessonPage';
 import HomePage from './pages/client/HomePage';
 import LearningsPage from './pages/client/LearningsPage';
 
@@ -24,38 +25,11 @@ const MainRoutes: React.FC = () => {
       {username && <NavBar />}
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route
-          path="/admin-course"
-          element={
-            <RequireAuth role="ADMIN">
-              <CoursePage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/admin-client"
-          element={
-            <RequireAuth role="ADMIN">
-              <ClientManagementPage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/client-home"
-          element={
-            <RequireAuth role="CLIENT">
-              <HomePage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/client-learnings"
-          element={
-            <RequireAuth role="CLIENT">
-              <LearningsPage />
-            </RequireAuth>
-          }
-        />
+        <Route path="/admin-course" element={ <RequireAuth role="ADMIN"><CoursePage /></RequireAuth>}/>
+        <Route path="/admin-course/:courseId/lessons" element={ <RequireAuth role="ADMIN"><LessonPage  /></RequireAuth>}/>
+        <Route path="/admin-client" element={ <RequireAuth role="ADMIN"><ClientManagementPage /></RequireAuth>}/>
+        <Route path="/client-home" element={ <RequireAuth role="CLIENT"><HomePage /></RequireAuth>}/>
+        <Route path="/client-learnings" element={ <RequireAuth role="CLIENT"><LearningsPage /></RequireAuth>}/>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </>

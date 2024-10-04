@@ -70,8 +70,8 @@ public class LessonController {
     create a lesson.
      */
     @PostMapping
-    public LessonDTO createLesson(@RequestBody LessonDTO lessonDTO){
-        Optional<Course> courseOptional = courseService.getCourseByID(lessonDTO.getCourseId());
+    public LessonDTO createLesson(@PathVariable Long courseId, @RequestBody LessonDTO lessonDTO){
+        Optional<Course> courseOptional = courseService.getCourseByID(courseId);
 
         if (courseOptional.isPresent()) {
             Course course = courseOptional.get();

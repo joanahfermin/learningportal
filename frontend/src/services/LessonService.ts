@@ -23,14 +23,14 @@ const LessonService = {
   },
 
   // Update a lesson by ID under a specific course
-  updateLesson: async (courseId: number, lessonId: number, lesson: Lesson): Promise<Lesson> => {
-    const response = await axiosInstance.put(`/courses/${courseId}/lessons/${lessonId}`, lesson);
+  updateLesson: async (lesson: Lesson): Promise<Lesson> => {
+    const response = await axiosInstance.put(`/courses/${lesson.courseId}/lessons/${lesson.id}`, lesson);
     return response.data;
   },
 
   // Delete a lesson by ID under a specific course
-  deleteLesson: async (courseId: number, lessonId: number): Promise<void> => {
-    await axiosInstance.delete(`/courses/${courseId}/lessons/${lessonId}`);
+  deleteLesson: async (lesson: Lesson): Promise<void> => {
+    await axiosInstance.delete(`/courses/${lesson.courseId}/lessons/${lesson.id}`);
   },
 };
 
