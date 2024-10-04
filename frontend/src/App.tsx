@@ -1,24 +1,75 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './components/Auth/AuthContext';
+import NavBar from './components/NavBar';
 import LoginPage from './pages/LoginPage';
-import Admin from './pages/Admin';
-import Client from './pages/Client';
+import CoursePage from './pages/admin/CoursePage';
+import ClientManagementPage from './pages/admin/ClientManagementPage';
+import HomePage from './pages/client/HomePage';
+import LearningsPage from './pages/client/LearningsPage';
 
 const App: React.FC = () => {
-  const [userRole, setUserRole] = useState<string | null>(null);
+  return (
+    <AuthProvider>
+      <MainRoutes />
+    </AuthProvider>
+  );
+};
 
-  if (userRole === null) {
-    return <LoginPage setUserRole={setUserRole} />;
-  }
+const MainRoutes: React.FC = () => {
+  const { username } = useAuth();
 
   return (
-    <div className="App">
-      {userRole === 'admin' ? (
-        <Admin />
-      ) : (
-        <Client />
-      )}
-    </div>
+    <>
+      {username && <NavBar />}
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route
+          path="/course"
+          element={
+            <RequireAuth role="ADMIN">
+              <CoursePage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/client"
+          element={
+            <RequireAuth role="ADMIN">
+              <ClientManagementPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <RequireAuth role="CLIENT">
+              <HomePage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/learnings"
+          element={
+            <RequireAuth role="CLIENT">
+              <LearningsPage />
+            </RequireAuth>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </>
   );
+};
+
+const RequireAuth: React.FC<{ children: JSX.Element; role: 'ADMIN' | 'CLIENT' }> = ({ children, role }) => {
+  const { role: userRole, username } = useAuth();
+
+  if (!username || userRole !== role) {
+    return <Navigate to="/" />;
+  }
+
+  return children;
 };
 
 export default App;

@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import CoursePage from './admin/CoursePage';
 import ClientManagementPage from './admin/ClientManagementPage';
 
 const Admin: React.FC = () => {
-  const [activePage, setActivePage] = useState<string>('CourseManagement');
+  const location = useLocation();
 
-  const renderPage = () => {
-    switch (activePage) {
-      case 'CourseManagement':
-        return <CoursePage />;
-      case 'ClientManagement':
-        return <ClientManagementPage />;
-      default:
-        return <CoursePage />;
-    }
-  };
+  useEffect(() => {
+    console.log('Current location:', location.pathname);
+  }, [location]);
 
   return (
     <div className="App">
-      <NavBar role="admin" setActivePage={setActivePage} />
+      <NavBar role="admin"/>
       <div className="main-content">
-        {renderPage()}
+        <Routes>
+          <Route path="/admin/course" element={<CoursePage />} />
+          <Route path="/admin/client" element={<ClientManagementPage />} />
+        </Routes>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

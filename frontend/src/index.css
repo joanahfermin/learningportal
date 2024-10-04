@@ -51,11 +51,17 @@ body, .login-page {
 }
 
 .navbar-item, .navbar-link {
+  background-color: #337ab7 !important;
   color: white !important;
   text-decoration: none;
 }
 
-.navbar-item:hover, .navbar-link:hover {
+.navbar-item:active, .navbar-link:active {
+  background-color: #337ab7 !important;
+  color: white;
+}
+
+.navbar-item:hover, .navbar-link:hover{
   background-color: transparent;
   color: #ddd !important;
 }
