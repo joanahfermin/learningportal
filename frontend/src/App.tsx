@@ -25,7 +25,7 @@ const MainRoutes: React.FC = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route
-          path="/course"
+          path="/admin-course"
           element={
             <RequireAuth role="ADMIN">
               <CoursePage />
@@ -33,7 +33,7 @@ const MainRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/client"
+          path="/admin-client"
           element={
             <RequireAuth role="ADMIN">
               <ClientManagementPage />
@@ -41,7 +41,7 @@ const MainRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/home"
+          path="/client-home"
           element={
             <RequireAuth role="CLIENT">
               <HomePage />
@@ -49,7 +49,7 @@ const MainRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/learnings"
+          path="/client-learnings"
           element={
             <RequireAuth role="CLIENT">
               <LearningsPage />

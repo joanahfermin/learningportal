@@ -10,33 +10,13 @@ const LoginPage: React.FC = () => {
   const { login, role } = useAuth();
   const navigate = useNavigate();
 
-  /*
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await login(username, password);
-      setError(null);
-
-      // Redirect based on role
-      const role = useAuth().role;
-      if (role === "ADMIN") {
-        navigate("/course");
-      } else if (role === "CLIENT") {
-        navigate("/home");
-      }
-    } catch (err) {
-      setError("Invalid username or password");
-    }
-  };
-  */
-
   useEffect(() => {
     if (role) {
       // Redirect based on role
       if (role === 'ADMIN') {
-        navigate('/course');
+        navigate('/admin-course');
       } else if (role === 'CLIENT') {
-        navigate('/home');
+        navigate('/client-home');
       }
     }
   }, [role, navigate]);

@@ -33,14 +33,14 @@ const NavBar: React.FC = () => {
           <div className="navbar-end">
               {role === "ADMIN" && (
                 <>
-                  <Link className="navbar-item" to="/course">Course</Link>
-                  <Link className="navbar-item" to="/client">Client</Link>
+                  <Link className="navbar-item" to="/admin-course">Course</Link>
+                  <Link className="navbar-item" to="/admin-client">Client</Link>
                 </>
               )}
               {role === "CLIENT" && (
                 <>
-                  <Link className="navbar-item" to="/home">Home</Link>
-                  <Link className="navbar-item" to="/learnings">Learnings</Link>
+                  <Link className="navbar-item" to="/client-home">Home</Link>
+                  <Link className="navbar-item" to="/client-learnings">Learnings</Link>
                 </>
               )}
               <a  className="navbar-item" onClick={logout}>Logout</a>
