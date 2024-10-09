@@ -1,15 +1,23 @@
 package com.kuyajon.learningportal.service;
 
 import com.kuyajon.learningportal.model.client.*;
+import com.kuyajon.learningportal.model.sys.User;
 import com.kuyajon.learningportal.repository.client.*;
+import com.kuyajon.learningportal.repository.sys.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ClientGroupRepository clientGroupRepository;
@@ -26,8 +34,12 @@ public class ClientService {
 
 
     //Retrieve client by id.
-    public Client getClientByID(Long id){
-        return clientRepository.findById(id).get();
+    public Optional<Client> getClientByID(Long id){
+        return Optional.of(clientRepository.findById(id).get());
+    }
+
+    public Optional<User> getByUserId(Long id){
+        return Optional.of(userRepository.findById(id).get());
     }
 
     public ClientGroup getClientGroupByID(Long id){
@@ -92,4 +104,8 @@ public class ClientService {
         topicProgressRepository.deleteById(id);
     }
 
+
+    public List<Client> getClientByUserId(Long userId){
+        return clientRepository.findByUserId(userId);
+    }
 }
