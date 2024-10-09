@@ -30,7 +30,7 @@ public class ClientController {
     //getClientById - done
 
     //createClient
-    //updateClient
+    //updateClient - done
     //deleteClient
 
     @GetMapping
