@@ -19,13 +19,6 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class LessonController {
 
-    // tells Spring to automatically "inject" or "provide" an instance of a class
-    @Autowired
-    private LessonRepository lessonRepository;
-
-    @Autowired
-    private CourseRepository courseRepository;
-
     @Autowired
     private CourseService courseService;
 
@@ -36,15 +29,7 @@ public class LessonController {
      */
     @GetMapping("/{id}")
     public Optional<LessonDTO> getLessonById(@PathVariable Long courseId, @PathVariable Long id) {
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
-
-        if (lessonOptional.isPresent()) {
-            Lesson lesson = lessonOptional.get();
-            LessonDTO lessonDTO = convertToDTO(lesson);
-            return Optional.of(lessonDTO);
-        } else {
-            throw new IllegalArgumentException("Lesson ID must not be null");
-        }
+        return courseService.getLessonByID(id);
     }
 
     /*
@@ -53,15 +38,7 @@ public class LessonController {
      */
     @GetMapping
     public List<LessonDTO> getAllLessonByCourseId(@PathVariable Long courseId) {
-        List<Lesson> lessons = courseService.getLessonsByCourseId(courseId);
-        ;
-        List<LessonDTO> result = new ArrayList<LessonDTO>();
-
-        for (Lesson lesson : lessons) {
-            LessonDTO dto = convertToDTO(lesson);
-            result.add(dto);
-        }
-        return result;
+        return courseService.getLessonsByCourseId(courseId);
     }
 
     /*
@@ -70,34 +47,14 @@ public class LessonController {
      */
     @PostMapping
     public LessonDTO createLesson(@PathVariable Long courseId, @RequestBody LessonDTO lessonDTO) {
-        Optional<Course> courseOptional = courseService.getCourseByID(courseId);
-
-        if (courseOptional.isPresent()) {
-            Course course = courseOptional.get();
-            Lesson lesson = new Lesson();
-            lesson.setName(lessonDTO.getName());
-            lesson.setDescription(lessonDTO.getDescription());
-            lesson.setCourse(course);
-            Lesson savedLesson = courseService.saveOrUpdateLesson(lesson);
-            return convertToDTO(savedLesson);
-        } else {
-            throw new IllegalArgumentException("Course ID must not be null");
-        }
+        lessonDTO.setCourseId(courseId);
+        return courseService.saveOrUpdateLesson(lessonDTO);
     }
 
     @PutMapping("/{id}")
     public LessonDTO updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
-        ;
-        if (lessonOptional.isPresent()) {
-            Lesson lesson = lessonOptional.get();
-            lesson.setDescription(lessonDTO.getDescription());
-            lesson.setName(lessonDTO.getName());
-            lesson = courseService.saveOrUpdateLesson(lesson);
-            return convertToDTO(lesson);
-        } else {
-            throw new IllegalArgumentException("Course ID must not be null");
-        }
+        lessonDTO.setId(id);
+        return courseService.saveOrUpdateLesson(lessonDTO);
     }
 
     /*
@@ -106,7 +63,7 @@ public class LessonController {
      */
     @DeleteMapping("/{id}")
     public void deleteCourseById(@PathVariable Long id) {
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
+        Optional<LessonDTO> lessonOptional = courseService.getLessonByID(id);
         if (lessonOptional.isPresent()) {
             courseService.deleteLessonById(id);
         } else {
@@ -114,19 +71,4 @@ public class LessonController {
         }
     }
 
-    // converts lesson to lessonDTO
-    public LessonDTO convertToDTO(Lesson lesson) {
-        LessonDTO lessonDTO = new LessonDTO();
-        lessonDTO.setId(lesson.getId());
-        lessonDTO.setName(lesson.getName());
-        lessonDTO.setDescription(lesson.getDescription());
-
-        // Assuming lesson.getCourse() returns a Course object
-        if (lesson.getCourse() != null) {
-            lessonDTO.setCourseId(lesson.getCourse().getId()); // Get the ID from the Course object
-        } else {
-            lessonDTO.setCourseId(null); // or handle the case where the course is null
-        }
-        return lessonDTO;
-    }
 }

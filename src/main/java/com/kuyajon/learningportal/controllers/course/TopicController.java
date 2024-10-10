@@ -50,19 +50,20 @@ public class TopicController {
 
     @PostMapping()
     public TopicDTO createTopic(@PathVariable Long lessonId, @RequestBody TopicDTO topicDTO) {
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(lessonId);
+        return null;
+        // Optional<Lesson> lessonOptional = courseService.getLessonByID(lessonId);
 
-        if (lessonOptional.isPresent()) {
-            Lesson lesson = lessonOptional.get();
-            Topic topic = new Topic();
-            topic.setName(topicDTO.getName());
-            topic.setContent(topicDTO.getContent());
-            topic.setLesson(lesson);
-            Topic topicSaved = courseService.saveOrUpdateTopic(topic);
-            return convertToDTO(topicSaved);
-        } else {
-            throw new IllegalArgumentException("Lesson ID must not be null");
-        }
+        // if (lessonOptional.isPresent()) {
+        // Lesson lesson = lessonOptional.get();
+        // Topic topic = new Topic();
+        // topic.setName(topicDTO.getName());
+        // topic.setContent(topicDTO.getContent());
+        // topic.setLesson(lesson);
+        // Topic topicSaved = courseService.saveOrUpdateTopic(topic);
+        // return convertToDTO(topicSaved);
+        // } else {
+        // throw new IllegalArgumentException("Lesson ID must not be null");
+        // }
     }
 
     @PutMapping("/{id}")

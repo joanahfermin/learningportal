@@ -24,17 +24,17 @@ public class TestController {
     @Autowired
     private CourseService courseService;
 
-    //getAllTest - done
-    //getTestById - done 
-    //getAllTestByLessonId - done
-    //getAllTestByTopicId - done
+    // getAllTest - done
+    // getTestById - done
+    // getAllTestByLessonId - done
+    // getAllTestByTopicId - done
 
     @GetMapping
-    public List<TestDTO> getAllTest(){
+    public List<TestDTO> getAllTest() {
         List<Test> tests = courseService.getAllTest();
         List<TestDTO> result = new ArrayList<TestDTO>();
 
-        for (Test test : tests){
+        for (Test test : tests) {
             TestDTO testDTO = convertToDTO(test);
             result.add(testDTO);
         }
@@ -42,7 +42,7 @@ public class TestController {
     }
 
     @GetMapping("/{id}")
-    public Optional<TestDTO> getTestById (@PathVariable Long id){
+    public Optional<TestDTO> getTestById(@PathVariable Long id) {
         Optional<Test> testOptional = courseService.getTestByID(id);
 
         if (testOptional.isPresent()) {
@@ -55,7 +55,7 @@ public class TestController {
     }
 
     @GetMapping("/lesson/{lessonId}")
-    public List<TestDTO> getAllTestByLessonId (@PathVariable Long lessonId){
+    public List<TestDTO> getAllTestByLessonId(@PathVariable Long lessonId) {
         List<Test> tests = courseService.getTestByLessonId(lessonId);
         List<TestDTO> result = new ArrayList<TestDTO>();
 
@@ -71,7 +71,7 @@ public class TestController {
     }
 
     @GetMapping("/topic/{topicId}")
-    public List<TestDTO> getAllTestByTopicId (@PathVariable Long topicId){
+    public List<TestDTO> getAllTestByTopicId(@PathVariable Long topicId) {
         List<Test> topics = courseService.getTestByTopicId(topicId);
         List<TestDTO> result = new ArrayList<TestDTO>();
 
@@ -86,36 +86,38 @@ public class TestController {
         return result;
     }
 
-    //createTest - TO CONFIRM IF LESSON/TOPIC ID MUST BE REQUIRED
-    //updateTest - TO CONFIRM IF LESSON/TOPIC ID MUST BE REQUIRED
-    //deleteTest - done
+    // createTest - TO CONFIRM IF LESSON/TOPIC ID MUST BE REQUIRED
+    // updateTest - TO CONFIRM IF LESSON/TOPIC ID MUST BE REQUIRED
+    // deleteTest - done
 
     @PostMapping()
-    public TestDTO createTest(@RequestBody TestDTO testDTO){
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(testDTO.getLessonId());
-        Optional<Topic> topicOptional = courseService.getTopicByID(testDTO.getTopicId());
+    public TestDTO createTest(@RequestBody TestDTO testDTO) {
+        return null;
+        // Optional<Lesson> lessonOptional =
+        // courseService.getLessonByID(testDTO.getLessonId());
+        // Optional<Topic> topicOptional =
+        // courseService.getTopicByID(testDTO.getTopicId());
 
-        if (lessonOptional.isPresent()) {
-            Lesson lesson = lessonOptional.get();
-            Topic topic = topicOptional.get();
-            Test test = new Test();
-            test.setName(testDTO.getName());
-            test.setLesson(lesson);
-            test.setTopic(topic);
-            return convertToDTO(test);
-        } else {
-            throw new IllegalArgumentException("Lesson/Topic ID must not be null");
-        }
+        // if (lessonOptional.isPresent()) {
+        // Lesson lesson = lessonOptional.get();
+        // Topic topic = topicOptional.get();
+        // Test test = new Test();
+        // test.setName(testDTO.getName());
+        // test.setLesson(lesson);
+        // test.setTopic(topic);
+        // return convertToDTO(test);
+        // } else {
+        // throw new IllegalArgumentException("Lesson/Topic ID must not be null");
+        // }
     }
 
-
     @PutMapping("/{id}")
-    public TestDTO updateTest(@PathVariable Long id, @RequestBody TestDTO testDTO){
+    public TestDTO updateTest(@PathVariable Long id, @RequestBody TestDTO testDTO) {
         return null;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTest(@PathVariable Long id){
+    public void deleteTest(@PathVariable Long id) {
         Optional<Test> test = courseService.getTestByID(id);
         if (test.isPresent()) {
             courseService.deleteTestById(id);
@@ -124,7 +126,7 @@ public class TestController {
         }
     }
 
-    private TestDTO convertToDTO(Test test){
+    private TestDTO convertToDTO(Test test) {
         TestDTO testDTO = new TestDTO();
         testDTO.setId(test.getId());
         testDTO.setName(test.getName());
