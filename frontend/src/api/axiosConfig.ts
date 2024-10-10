@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getToken } from '../services/tokenService';
+import { getToken } from '../services/TokenService';
 
 const baseURL =
   window.location.port === "5173"

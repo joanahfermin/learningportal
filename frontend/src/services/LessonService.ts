@@ -1,9 +1,9 @@
-import axiosInstance from "../api/AxiosConfig";
+import axiosInstance from "../api/axiosConfig";
 import { Lesson } from "../model/Lesson";
 
 // Service for interacting with the lesson API
 const LessonService = {
-  
+
   // Get all lessons for a specific course
   getLessonsByCourseId: async (courseId: number): Promise<Lesson[]> => {
     const response = await axiosInstance.get(`/courses/${courseId}/lessons`);

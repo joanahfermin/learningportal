@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import LessonService from '../../services/LessonService';
 import TopicService from '../../services/TopicService';
 import { Lesson } from '../../model/Lesson';
 import { Topic } from '../../model/Topic';
-import ConfirmDialog from '../../components/ConfirmDialog'; // Adjust the path accordingly
+import ConfirmDialog from '../../components/ConfirmDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import MarkdownEditor from 'react-markdown-editor-lite';
+import 'react-markdown-editor-lite/lib/index.css';
+import markdownIt from 'markdown-it';
+
+const mdParser = new markdownIt();
 
 const TopicPage: React.FC = () => {
     const navigate = useNavigate();
@@ -49,17 +53,20 @@ const TopicPage: React.FC = () => {
         setSelectedTopic(null);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+    const handleInputChange = (name: string, value: string) => {
         setSelectedTopic((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleContentChange = ({ text }: { text: string }) => {
+        handleInputChange('content', text);
     };
 
     const saveTopic = async () => {
         if (selectedTopic) {
             if (selectedTopic.id) {
-                await TopicService.updateTopic(Number(courseId), Number(lessonId), selectedTopic as Topic); // Update existing topic
+                await TopicService.updateTopic(Number(courseId), Number(lessonId), selectedTopic as Topic);
             } else {
-                await TopicService.createTopic(Number(courseId), Number(lessonId), selectedTopic as Omit<Topic, 'id'>); // Create new topic
+                await TopicService.createTopic(Number(courseId), Number(lessonId), selectedTopic as Omit<Topic, 'id'>);
             }
             closeModal();
             fetchTopics();
@@ -95,20 +102,17 @@ const TopicPage: React.FC = () => {
                 </div>
             </div>
 
-
             <table className="table is-fullwidth mt-4">
                 <thead>
                     <tr>
-                        <th style={{ width: 250 }}>Name</th>
-                        <th>Content</th>
-                        <th style={{ width: 200 }}>Actions</th>
+                        <th>Name</th>
+                        <th style={{ width: 150 }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {topics.map(topic => (
                         <tr key={topic.id}>
                             <td>{topic.name}</td>
-                            <td>{topic.content}</td>
                             <td>
                                 <button className="button is-small is-info mr-2" onClick={() => openModal(topic)} title="Edit">
                                     <FontAwesomeIcon icon={faEdit} />
@@ -139,19 +143,19 @@ const TopicPage: React.FC = () => {
                                         type="text"
                                         name="name"
                                         value={selectedTopic.name || ''}
-                                        onChange={handleInputChange}
+                                        onChange={(e) => handleInputChange('name', e.target.value)}
                                     />
                                 </div>
                             </div>
                             <div className="field">
                                 <label className="label">Content</label>
                                 <div className="control">
-                                    <textarea
-                                        className="textarea"
-                                        name="content"
+                                    <MarkdownEditor
                                         value={selectedTopic.content || ''}
-                                        onChange={handleInputChange}
-                                    ></textarea>
+                                        style={{ height: '300px' }}
+                                        renderHTML={(text) => mdParser.render(text)}
+                                        onChange={handleContentChange}
+                                    />
                                 </div>
                             </div>
                         </section>

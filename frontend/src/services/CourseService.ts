@@ -1,4 +1,4 @@
-import axiosInstance from "../api/AxiosConfig";
+import axiosInstance from "../api/axiosConfig";
 import { Course } from "../model/Course";
 
 class CourseService {

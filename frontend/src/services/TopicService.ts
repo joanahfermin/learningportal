@@ -1,4 +1,4 @@
-import axiosInstance from "../api/AxiosConfig";
+import axiosInstance from "../api/axiosConfig";
 import { Topic } from "../model/Topic";
 
 // Service for interacting with the topic API

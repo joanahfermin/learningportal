@@ -134,3 +134,8 @@ body,
   width: 960px;
   max-width: 90%;
 }
+
+/* Fix markdown editor icons height*/
+.rc-md-editor .rc-md-navigation .button-wrap .button {
+  height: 40px;
+}
