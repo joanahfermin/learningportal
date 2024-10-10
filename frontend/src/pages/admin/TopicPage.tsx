@@ -125,7 +125,7 @@ const TopicPage: React.FC = () => {
             {isModalActive && selectedTopic && (
                 <div className={`modal ${isModalActive ? 'is-active' : ''}`}>
                     <div className="modal-background" onClick={closeModal}></div>
-                    <div className="modal-card">
+                    <div className="modal-card is-topic-modal">
                         <header className="modal-card-head">
                             <p className="modal-card-title">{selectedTopic.id ? 'Edit Topic' : 'Add Topic'}</p>
                             <button className="delete" aria-label="close" onClick={closeModal}></button>

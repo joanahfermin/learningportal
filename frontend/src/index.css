@@ -1,7 +1,9 @@
 @import '~bulmaswatch/cerulean/bulmaswatch.min.css';
 
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   margin: 0;
   display: flex;
@@ -15,7 +17,8 @@ body {
   height: 100%;
 }
 
-body, .login-page {
+body,
+.login-page {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -40,38 +43,46 @@ body, .login-page {
     background-image: none !important;
   }
 }
+
 .navbar:not(.is-transparent) {
   background-image: none !important;
 }
 
 /* Ensure the navbar background is consistent and text is visible */
-.navbar, .navbar-menu {
-  background-color: #337ab7 !important; /* Apply the background color to both navbar and menu */
+.navbar,
+.navbar-menu {
+  background-color: #337ab7 !important;
+  /* Apply the background color to both navbar and menu */
   color: white;
 }
 
-.navbar-item, .navbar-link {
+.navbar-item,
+.navbar-link {
   background-color: #337ab7 !important;
   color: white !important;
   text-decoration: none;
 }
 
-.navbar-item:active, .navbar-link:active {
+.navbar-item:active,
+.navbar-link:active {
   background-color: #337ab7 !important;
   color: white;
 }
 
-.navbar-item:hover, .navbar-link:hover{
+.navbar-item:hover,
+.navbar-link:hover {
   background-color: transparent;
   color: #ddd !important;
 }
 
 .navbar-burger {
-  color: white; /* Ensure burger menu is visible */
+  color: white;
+  /* Ensure burger menu is visible */
 }
 
 .container {
-  max-width: 960px; /* Adjust this width as necessary */
+  max-width: 960px;
+  /* Adjust this width as necessary */
   margin: 0 auto;
   flex: 1;
   width: 100%;
@@ -97,7 +108,8 @@ body, .login-page {
 .login-box {
   max-width: 400px;
   width: 100%;
-  padding: 30px 70px; /* Your updated padding */
+  padding: 30px 70px;
+  /* Your updated padding */
   background: white;
   border-radius: 6px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -116,4 +128,9 @@ body, .login-page {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.is-topic-modal {
+  width: 960px;
+  max-width: 90%;
 }
