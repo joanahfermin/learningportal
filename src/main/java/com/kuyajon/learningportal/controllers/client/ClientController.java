@@ -1,8 +1,8 @@
 package com.kuyajon.learningportal.controllers.client;
 
-
 import com.kuyajon.learningportal.dto.client.ClientDTO;
 import com.kuyajon.learningportal.model.client.Client;
+import com.kuyajon.learningportal.model.client.ClientGroup;
 import com.kuyajon.learningportal.model.sys.User;
 import com.kuyajon.learningportal.repository.client.ClientRepository;
 import com.kuyajon.learningportal.service.ClientService;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("/api/clients")
 @CrossOrigin(origins = "*")
 public class ClientController {
 
@@ -26,19 +26,19 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
-    //getAllClients - done
-    //getClientById - done
+    // getAllClients - done
+    // getClientById - done
 
-    //createClient
-    //updateClient - done
-    //deleteClient - done
+    // createClient
+    // updateClient - done
+    // deleteClient - done
 
     @GetMapping
-    public List<ClientDTO> getAllClients(){
+    public List<ClientDTO> getAllClients() {
         List<Client> clients = clientRepository.findAll();
         List<ClientDTO> result = new ArrayList<ClientDTO>();
 
-        for (Client client : clients){
+        for (Client client : clients) {
             ClientDTO clientDTO = convertToDTO(client);
             result.add(clientDTO);
         }
@@ -46,30 +46,35 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public Optional<ClientDTO> getClientById(@PathVariable Long id){
+    public Optional<ClientDTO> getClientById(@PathVariable Long id) {
         Optional<Client> optionalClient = clientService.getClientByID(id);
 
-        if (optionalClient.isPresent()){
+        if (optionalClient.isPresent()) {
             Client client = optionalClient.get();
             ClientDTO clientDTO = convertToDTO(client);
-            return  Optional.of(clientDTO);
-        } else{
+            return Optional.of(clientDTO);
+        } else {
             throw new IllegalArgumentException("Client ID must not be null");
         }
     }
 
     @PostMapping
-    public ClientDTO createClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO){
+    public ClientDTO createClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+        // On create
+        // Create a method in ClientService called RegisterClient with parameter
+        // ClientDTO
+        // Create user based on clientDTO.username
+        // Create the Client, you shoud populate client.groups
+
         Optional<User> optionalClient = clientService.getByUserId(clientDTO.getUserId());
         return null;
     }
 
-
     @PutMapping
-    public ClientDTO updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO){
+    public ClientDTO updateClient(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
         Optional<Client> optionalClient = clientService.getClientByID(id);
 
-        if (optionalClient.isPresent()){
+        if (optionalClient.isPresent()) {
             Client client = optionalClient.get();
             client.setFirstName(clientDTO.getFirstName());
             client.setLastName(clientDTO.getLastName());
@@ -81,22 +86,28 @@ public class ClientController {
     }
 
     @DeleteMapping
-    public void deleteClient(@PathVariable Long id){
+    public void deleteClient(@PathVariable Long id) {
         Optional<Client> optionalClient = clientService.getClientByID(id);
 
-        if (optionalClient.isPresent()){
+        if (optionalClient.isPresent()) {
             clientService.deleteClientById(id);
         } else {
             throw new IllegalArgumentException("No client ID found.");
         }
     }
 
-    private ClientDTO convertToDTO(Client client){
+    private ClientDTO convertToDTO(Client client) {
         ClientDTO clientDTO = new ClientDTO();
         clientDTO.setId(client.getId());
         clientDTO.setFirstName(client.getFirstName());
         clientDTO.setLastName(client.getLastName());
         clientDTO.setUserId(client.getUser().getId());
+
+        List<Long> clientGroupIds = new ArrayList<Long>(client.getGroups().size());
+        for (ClientGroup grp : client.getGroups()) {
+            clientGroupIds.add(grp.getId());
+        }
+        clientDTO.setClientGroupIds(clientGroupIds);
         return clientDTO;
     }
 }

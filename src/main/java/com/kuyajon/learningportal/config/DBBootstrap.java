@@ -25,6 +25,7 @@ import com.kuyajon.learningportal.model.sys.User;
 import com.kuyajon.learningportal.repository.sys.UserRepository;
 import com.kuyajon.learningportal.service.SecurityService;
 
+import java.util.Random;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -148,14 +149,42 @@ public class DBBootstrap {
 
     private void createClientGroups() {
         if (clientGroupRepository.count() == 0) {
+            Random rnd = new Random();
+
             ClientGroup grp1 = new ClientGroup();
             grp1.setName("Grp1");
             grp1.setDescription("Test");
             clientGroupRepository.save(grp1);
             ClientGroup grp2 = new ClientGroup();
-            grp2.setName("Grp1");
+            grp2.setName("Grp2");
             grp2.setDescription("Test");
             clientGroupRepository.save(grp2);
+            ClientGroup grp3 = new ClientGroup();
+            grp3.setName("Grp3");
+            grp3.setDescription("Test");
+            clientGroupRepository.save(grp3);
+
+            for (int i = 0; i < 10; i++) {
+                User u = new User();
+                u.setUsername("user" + i);
+                u.setPassword("test");
+                u.setRole(ERole.STUDENT);
+                userRepository.save(u);
+
+                Client client = new Client();
+                client.setFirstName("fname" + i);
+                client.setLastName("lname" + i);
+                client.setUser(u);
+
+                client.getGroups().add(grp1);
+                if (rnd.nextInt(1000) < 500) {
+                    client.getGroups().add(grp2);
+                }
+                if (rnd.nextInt(1000) < 500) {
+                    client.getGroups().add(grp3);
+                }
+                clientRepository.save(client);
+            }
         }
 
     }
