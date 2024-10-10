@@ -275,15 +275,18 @@ public class CourseService {
             question = new Question();
 
             // Set Topic if topicId is provided
-            Optional<Topic> topicOptional = topicRepository.findById(questionDTO.getTopicId());
-            if (topicOptional.isPresent()) {
-                question.setTopic(topicOptional.get());
+            if (questionDTO.getTopicId() != null) {
+                Optional<Topic> topicOptional = topicRepository.findById(questionDTO.getTopicId());
+                if (topicOptional.isPresent()) {
+                    question.setTopic(topicOptional.get());
+                }
             }
 
-            // Set Lesson if lessonId is provided
-            Optional<Lesson> lessonOptional = lessonRepository.findById(questionDTO.getLessonId());
-            if (lessonOptional.isPresent()) {
-                question.setLesson(lessonOptional.get());
+            if (questionDTO.getLessonId() != null) {
+                Optional<Lesson> lessonOptional = lessonRepository.findById(questionDTO.getLessonId());
+                if (lessonOptional.isPresent()) {
+                    question.setLesson(lessonOptional.get());
+                }
             }
         } else {
             // Get existing Question entity from repository if ID exists

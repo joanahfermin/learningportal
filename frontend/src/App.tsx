@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import CoursePage from './pages/admin/CoursePage';
 import LessonPage from './pages/admin/LessonPage';
 import TopicPage from './pages/admin/TopicPage';
+import TopicQuestionPage from './pages/admin/TopicQuestionPage';
 import ClientManagementPage from './pages/admin/ClientManagementPage';
 import ClientGroupPage from './pages/admin/ClientGroupPage';
 import HomePage from './pages/client/HomePage';
@@ -30,6 +31,7 @@ const MainRoutes: React.FC = () => {
         <Route path="/admin-course" element={<RequireAuth role="ADMIN"><CoursePage /></RequireAuth>} />
         <Route path="/admin-course/:courseId/lessons" element={<RequireAuth role="ADMIN"><LessonPage /></RequireAuth>} />
         <Route path="/admin-course/:courseId/lessons/:lessonId/topics" element={<RequireAuth role="ADMIN"><TopicPage /></RequireAuth>} />
+        <Route path="/admin-course/:courseId/lessons/:lessonId/topics/:topicId/questions" element={<RequireAuth role="ADMIN"><TopicQuestionPage /></RequireAuth>} />
         <Route path="/admin-client" element={<RequireAuth role="ADMIN"><ClientManagementPage /></RequireAuth>} />
         <Route path="/admin-client-group" element={<RequireAuth role="ADMIN"><ClientGroupPage /></RequireAuth>} />
         <Route path="/client-home" element={<RequireAuth role="CLIENT"><HomePage /></RequireAuth>} />

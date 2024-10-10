@@ -5,7 +5,7 @@ import TopicService from '../../services/TopicService';
 import { Topic, Lesson } from '../../model/Models';
 import ConfirmDialog from '../../components/ConfirmDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faBook, faTrash } from '@fortawesome/free-solid-svg-icons';
 import MarkdownEditor from 'react-markdown-editor-lite';
 import 'react-markdown-editor-lite/lib/index.css';
 import markdownIt from 'markdown-it';
@@ -118,6 +118,9 @@ const TopicPage: React.FC = () => {
                                 </button>
                                 <button className="button is-small is-danger" onClick={() => requestDeleteTopic(topic)} title="Delete">
                                     <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                                <button className="button is-small is-primary" onClick={() => navigate(`/admin-course/${lesson?.courseId}/lessons/${lesson?.id}/topics/${topic.id}/questions`)} title="Questions">
+                                    <FontAwesomeIcon icon={faBook} />
                                 </button>
                             </td>
                         </tr>

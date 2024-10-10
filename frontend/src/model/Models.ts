@@ -30,3 +30,23 @@ export interface ClientGroup {
     name: string;
     description?: string;
 }
+
+export interface Question {
+    id: number;
+    questionText: string;
+    choiceA: string;
+    choiceB: string;
+    choiceC: string;
+    choiceD: string;
+    answer: AnswerChoice;
+    solution: string;
+    topicId: number;
+    lessonId: number;
+}
+
+export enum AnswerChoice {
+    A = 'A',
+    B = 'B',
+    C = 'C',
+    D = 'D'
+}
