@@ -1,15 +1,11 @@
 package com.kuyajon.learningportal.controllers.course;
 
-import com.kuyajon.learningportal.dto.course.LessonDTO;
 import com.kuyajon.learningportal.dto.course.TopicDTO;
-import com.kuyajon.learningportal.model.course.Lesson;
-import com.kuyajon.learningportal.model.course.Topic;
 import com.kuyajon.learningportal.repository.course.TopicRepository;
 import com.kuyajon.learningportal.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,9 +13,6 @@ import java.util.Optional;
 @RequestMapping("/api/courses/{courseId}/lessons/{lessonId}/topics")
 @CrossOrigin(origins = "*")
 public class TopicController {
-
-    @Autowired
-    private TopicRepository topicRepository;
 
     @Autowired
     private CourseService courseService;

@@ -34,8 +34,12 @@ public class Question {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String solution;
 
-    @EqualsAndHashCode.Exclude
     @ManyToOne
-    @JoinColumn(name = "test_id", nullable = false)
-    private Test test;
+    @JoinColumn(name = "topic_id", nullable = true) // nullable = true by default
+    private Topic topic;
+
+    // Many-to-one relationship with Lesson (optional)
+    @ManyToOne
+    @JoinColumn(name = "lesson_id", nullable = true) // nullable = true by default
+    private Lesson lesson;
 }

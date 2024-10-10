@@ -2,8 +2,8 @@ package com.kuyajon.learningportal.service;
 
 import com.kuyajon.learningportal.dto.course.CourseDTO;
 import com.kuyajon.learningportal.dto.course.LessonDTO;
+import com.kuyajon.learningportal.dto.course.QuestionDTO;
 import com.kuyajon.learningportal.dto.course.TopicDTO;
-import com.kuyajon.learningportal.model.client.*;
 import com.kuyajon.learningportal.model.course.*;
 import com.kuyajon.learningportal.repository.course.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,6 @@ public class CourseService {
     private QuestionRepository questionRepository;
 
     @Autowired
-    private TestRepository testRepository;
-
-    @Autowired
     private TopicRepository topicRepository;
 
     // Retrieve all entity course.
@@ -42,22 +39,6 @@ public class CourseService {
         return result;
 
     }
-
-    // public List<Lesson> getAllLesson() {
-    // return lessonRepository.findAll();
-    // }
-
-    // public List<Question> getAllQuestion() {
-    // return questionRepository.findAll();
-    // }
-
-    // public List<Test> getAllTest() {
-    // return testRepository.findAll();
-    // }
-
-    // public List<Topic> getAllTopic() {
-    // return topicRepository.findAll();
-    // }
 
     // Retrieve course by id.
     public Optional<CourseDTO> getCourseByID(Long id) {
@@ -82,12 +63,16 @@ public class CourseService {
         }
     }
 
-    public Optional<Question> getQuestionByID(Long id) {
-        return Optional.of(questionRepository.findById(id).get());
-    }
+    public Optional<QuestionDTO> getQuestionByID(Long id) {
+        Optional<Question> questionOptional = questionRepository.findById(id);
+        if (questionOptional.isPresent()) {
+            Question q = questionOptional.get();
+            QuestionDTO result = convertToDTO(q);
+            return Optional.of(result);
+        } else {
+            return Optional.empty();
+        }
 
-    public Optional<Test> getTestByID(Long id) {
-        return Optional.of(testRepository.findById(id).get());
     }
 
     public Optional<TopicDTO> getTopicByID(Long id) {
@@ -99,7 +84,6 @@ public class CourseService {
         } else {
             return Optional.empty();
         }
-
     }
 
     // Save or update course obj.
@@ -115,12 +99,10 @@ public class CourseService {
         return convertToDTO(lesson);
     }
 
-    public Question saveOrUpdateQuestion(Question question) {
-        return questionRepository.save(question);
-    }
-
-    public Test saveOrUpdateTest(Test test) {
-        return testRepository.save(test);
+    public QuestionDTO saveOrUpdateQuestion(QuestionDTO questionDTO) {
+        Question question = convertToEntity(questionDTO);
+        questionRepository.save(question);
+        return convertToDTO(question);
     }
 
     public TopicDTO saveOrUpdateTopic(TopicDTO topicDTO) {
@@ -142,10 +124,6 @@ public class CourseService {
         questionRepository.deleteById(id);
     }
 
-    public void deleteTestById(Long id) {
-        testRepository.deleteById(id);
-    }
-
     public void deleteTopicById(Long id) {
         topicRepository.deleteById(id);
     }
@@ -161,24 +139,23 @@ public class CourseService {
         return result;
     }
 
-    public List<Question> getQuestionsByTestId(Long testId) {
-        return questionRepository.findByTestId(testId);
-    }
-
-    public List<Test> getTestByLessonId(Long lessonId) {
-        return testRepository.findTestByLessonId(lessonId);
-    }
-
-    public List<Test> getTestByTopicId(Long topicId) {
-        return testRepository.findTestByTopicId(topicId);
-    }
-
     public List<TopicDTO> getTopicsByLessonId(Long lessonId) {
         List<Topic> topics = topicRepository.findTopicByLessonId(lessonId);
         List<TopicDTO> result = new ArrayList<TopicDTO>();
 
         for (Topic topic : topics) {
             TopicDTO dto = convertToDTO(topic);
+            result.add(dto);
+        }
+        return result;
+    }
+
+    public List<QuestionDTO> getQuestionsByTopicId(Long topicId) {
+        List<Question> questions = questionRepository.findQuestionByTopicId(topicId);
+        List<QuestionDTO> result = new ArrayList<QuestionDTO>();
+
+        for (Question q : questions) {
+            QuestionDTO dto = convertToDTO(q);
             result.add(dto);
         }
         return result;
@@ -262,6 +239,67 @@ public class CourseService {
         topic.setName(topicDTO.getName());
         topic.setContent(topicDTO.getContent());
         return topic;
+    }
+
+    private QuestionDTO convertToDTO(Question question) {
+        QuestionDTO questionDTO = new QuestionDTO();
+        questionDTO.setId(question.getId());
+        questionDTO.setQuestionText(question.getQuestionText());
+        questionDTO.setChoiceA(question.getChoiceA());
+        questionDTO.setChoiceB(question.getChoiceB());
+        questionDTO.setChoiceC(question.getChoiceC());
+        questionDTO.setChoiceD(question.getChoiceD());
+        questionDTO.setAnswer(question.getAnswer());
+        questionDTO.setSolution(question.getSolution());
+
+        if (question.getTopic() != null && question.getTopic().getId() != null) {
+            questionDTO.setTopicId(question.getTopic().getId());
+        } else {
+            questionDTO.setTopicId(null);
+        }
+
+        if (question.getLesson() != null && question.getLesson().getId() != null) {
+            questionDTO.setLessonId(question.getLesson().getId());
+        } else {
+            questionDTO.setLessonId(null);
+        }
+
+        return questionDTO;
+    }
+
+    private Question convertToEntity(QuestionDTO questionDTO) {
+        Question question;
+
+        if (questionDTO.getId() == null || questionDTO.getId().longValue() == 0) {
+            // Create new Question entity if no ID or ID is 0
+            question = new Question();
+
+            // Set Topic if topicId is provided
+            Optional<Topic> topicOptional = topicRepository.findById(questionDTO.getTopicId());
+            if (topicOptional.isPresent()) {
+                question.setTopic(topicOptional.get());
+            }
+
+            // Set Lesson if lessonId is provided
+            Optional<Lesson> lessonOptional = lessonRepository.findById(questionDTO.getLessonId());
+            if (lessonOptional.isPresent()) {
+                question.setLesson(lessonOptional.get());
+            }
+        } else {
+            // Get existing Question entity from repository if ID exists
+            question = questionRepository.getReferenceById(questionDTO.getId());
+        }
+
+        // Set basic fields
+        question.setQuestionText(questionDTO.getQuestionText());
+        question.setChoiceA(questionDTO.getChoiceA());
+        question.setChoiceB(questionDTO.getChoiceB());
+        question.setChoiceC(questionDTO.getChoiceC());
+        question.setChoiceD(questionDTO.getChoiceD());
+        question.setAnswer(questionDTO.getAnswer());
+        question.setSolution(questionDTO.getSolution());
+
+        return question;
     }
 
 }

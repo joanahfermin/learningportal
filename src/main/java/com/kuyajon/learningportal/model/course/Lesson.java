@@ -33,6 +33,6 @@ public class Lesson {
     private Set<Topic> topics = new HashSet<>();
 
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-    private Test test;
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Question> questions = new HashSet<>();
 }

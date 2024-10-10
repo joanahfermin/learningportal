@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import com.kuyajon.learningportal.repository.course.CourseRepository;
 import com.kuyajon.learningportal.repository.course.LessonRepository;
 import com.kuyajon.learningportal.repository.course.QuestionRepository;
-import com.kuyajon.learningportal.repository.course.TestRepository;
 import com.kuyajon.learningportal.repository.course.TopicRepository;
 import com.kuyajon.learningportal.repository.client.ClientRepository;
 import com.kuyajon.learningportal.repository.client.ClientGroupRepository;
@@ -16,7 +15,6 @@ import com.kuyajon.learningportal.model.course.AnswerChoice;
 import com.kuyajon.learningportal.model.course.Course;
 import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Question;
-import com.kuyajon.learningportal.model.course.Test;
 import com.kuyajon.learningportal.model.course.Topic;
 import com.kuyajon.learningportal.model.client.Client;
 import com.kuyajon.learningportal.model.client.ClientGroup;
@@ -51,9 +49,6 @@ public class DBBootstrap {
 
     @Autowired
     private TopicRepository topicRepository;
-
-    @Autowired
-    private TestRepository testRepository;
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -127,14 +122,10 @@ public class DBBootstrap {
     }
 
     private void createTestObject(Lesson lesson, Topic topic) {
-        Test test = new Test();
-        test.setName("Test " + UUID.randomUUID());
-        test.setLesson(lesson);
-        test.setTopic(topic);
-        testRepository.save(test);
-
         for (int q = 0; q < 5; q++) {
             Question question = new Question();
+            question.setLesson(lesson);
+            question.setTopic(topic);
             question.setQuestionText("What is?");
             question.setChoiceA("Is it A");
             question.setChoiceB("Is it B");
@@ -142,7 +133,6 @@ public class DBBootstrap {
             question.setChoiceD("Is it D");
             question.setAnswer(AnswerChoice.B);
             question.setSolution("Here is how to solve it");
-            question.setTest(test);
             questionRepository.save(question);
         }
     }

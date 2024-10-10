@@ -1,5 +1,8 @@
 package com.kuyajon.learningportal.model.course;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,6 +30,6 @@ public class Topic {
     private Lesson lesson;
 
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-    private Test test;
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Question> questions = new HashSet<>();
 }
