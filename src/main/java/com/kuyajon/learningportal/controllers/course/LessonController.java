@@ -30,8 +30,9 @@ public class LessonController {
     private CourseService courseService;
 
     /*
-    used to handle HTTP GET requests in a RESTful web service using the provided id.
-    gets the lesson from the db based on the provided id.
+     * used to handle HTTP GET requests in a RESTful web service using the provided
+     * id.
+     * gets the lesson from the db based on the provided id.
      */
     @GetMapping("/{id}")
     public Optional<LessonDTO> getLessonById(@PathVariable Long courseId, @PathVariable Long id) {
@@ -47,18 +48,16 @@ public class LessonController {
     }
 
     /*
-    used to handle HTTP GET requests in a RESTful web service.
-    gets all the lesson from the db based on course ID.
+     * used to handle HTTP GET requests in a RESTful web service.
+     * gets all the lesson from the db based on course ID.
      */
     @GetMapping
     public List<LessonDTO> getAllLessonByCourseId(@PathVariable Long courseId) {
-        List<Lesson> lessons = courseService.getLessonsByCourseId(courseId);;
+        List<Lesson> lessons = courseService.getLessonsByCourseId(courseId);
+        ;
         List<LessonDTO> result = new ArrayList<LessonDTO>();
 
-        if (lessons.isEmpty()) {
-            throw new IllegalArgumentException("Lesson ID must not be null");
-        }
-        for (Lesson lesson:lessons){
+        for (Lesson lesson : lessons) {
             LessonDTO dto = convertToDTO(lesson);
             result.add(dto);
         }
@@ -66,11 +65,11 @@ public class LessonController {
     }
 
     /*
-    maps HTTP POST requests to this method.
-    create a lesson.
+     * maps HTTP POST requests to this method.
+     * create a lesson.
      */
     @PostMapping
-    public LessonDTO createLesson(@PathVariable Long courseId, @RequestBody LessonDTO lessonDTO){
+    public LessonDTO createLesson(@PathVariable Long courseId, @RequestBody LessonDTO lessonDTO) {
         Optional<Course> courseOptional = courseService.getCourseByID(courseId);
 
         if (courseOptional.isPresent()) {
@@ -88,7 +87,8 @@ public class LessonController {
 
     @PutMapping("/{id}")
     public LessonDTO updateLesson(@PathVariable Long id, @RequestBody LessonDTO lessonDTO) {
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);;
+        Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
+        ;
         if (lessonOptional.isPresent()) {
             Lesson lesson = lessonOptional.get();
             lesson.setDescription(lessonDTO.getDescription());
@@ -101,11 +101,11 @@ public class LessonController {
     }
 
     /*
-    used to handle HTTP DELETE requests in a RESTful web service.
-    delete the lesson based on lesson ID.
+     * used to handle HTTP DELETE requests in a RESTful web service.
+     * delete the lesson based on lesson ID.
      */
     @DeleteMapping("/{id}")
-    public void deleteCourseById(@PathVariable Long id){
+    public void deleteCourseById(@PathVariable Long id) {
         Optional<Lesson> lessonOptional = courseService.getLessonByID(id);
         if (lessonOptional.isPresent()) {
             courseService.deleteLessonById(id);
@@ -115,7 +115,7 @@ public class LessonController {
     }
 
     // converts lesson to lessonDTO
-    public LessonDTO convertToDTO(Lesson lesson){
+    public LessonDTO convertToDTO(Lesson lesson) {
         LessonDTO lessonDTO = new LessonDTO();
         lessonDTO.setId(lesson.getId());
         lessonDTO.setName(lesson.getName());

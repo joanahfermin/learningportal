@@ -74,14 +74,16 @@ const CoursePage: React.FC = () => {
   return (
     <div className="container">
       <h1 className="title">Courses</h1>
-      <button className="button is-primary" onClick={() => openModal()}>Add Course</button>
-      
+      <div className="buttons">
+        <button className="button is-primary" onClick={() => openModal()}>Add Course</button>
+      </div>
+
       <table className="table is-fullwidth mt-4">
         <thead>
           <tr>
-            <th style={{width: 250}}>Name</th>
+            <th style={{ width: 250 }}>Name</th>
             <th>Description</th>
-            <th style={{width: 200}}>Actions</th>
+            <th style={{ width: 200 }}>Actions</th>
           </tr>
         </thead>
         <tbody>

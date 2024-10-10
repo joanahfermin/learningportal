@@ -1,6 +1,5 @@
 package com.kuyajon.learningportal.controllers.course;
 
-
 import com.kuyajon.learningportal.dto.course.TopicDTO;
 import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Topic;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/topic")
+@RequestMapping("/api/courses/{courseId}/lessons/{lessonId}/topics")
 @CrossOrigin(origins = "*")
 public class TopicController {
 
@@ -24,23 +23,11 @@ public class TopicController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping()
-    public List<TopicDTO> getAllTopic(){
-        List<Topic> topics = courseService.getAllTopic();
-        List<TopicDTO> result = new ArrayList<TopicDTO>();
-
-        for (Topic topic : topics){
-            TopicDTO topicDTO = convertToDTO(topic);
-            result.add(topicDTO);
-        }
-        return result;
-    }
-
     @GetMapping("/{id}")
-    public Optional<TopicDTO> getTopicById(@PathVariable Long id){
+    public Optional<TopicDTO> getTopicById(@PathVariable Long id) {
         Optional<Topic> topicOptional = courseService.getTopicByID(id);
 
-        if (topicOptional.isPresent()){
+        if (topicOptional.isPresent()) {
             Topic topic = topicOptional.get();
             TopicDTO topicDTO = convertToDTO(topic);
             return Optional.of(topicDTO);
@@ -49,16 +36,12 @@ public class TopicController {
         }
     }
 
-    @GetMapping("/lesson/{lessonId}")
-    public List<TopicDTO> getAllTopicByLessonId(@PathVariable Long lessonId){
+    @GetMapping
+    public List<TopicDTO> getAllTopicByLessonId(@PathVariable Long lessonId) {
         List<Topic> topics = courseService.getTopicByLessonId(lessonId);
         List<TopicDTO> result = new ArrayList<TopicDTO>();
 
-        if (topics.isEmpty()) {
-            throw new IllegalArgumentException("Lesson ID must not be null");
-        }
-
-        for (Topic topic : topics){
+        for (Topic topic : topics) {
             TopicDTO topicDTO = convertToDTO(topic);
             result.add(topicDTO);
         }
@@ -66,10 +49,10 @@ public class TopicController {
     }
 
     @PostMapping()
-    public TopicDTO createTopic(@RequestBody TopicDTO topicDTO){
-        Optional<Lesson> lessonOptional = courseService.getLessonByID(topicDTO.getLessonId());
+    public TopicDTO createTopic(@PathVariable Long lessonId, @RequestBody TopicDTO topicDTO) {
+        Optional<Lesson> lessonOptional = courseService.getLessonByID(lessonId);
 
-        if (lessonOptional.isPresent()){
+        if (lessonOptional.isPresent()) {
             Lesson lesson = lessonOptional.get();
             Topic topic = new Topic();
             topic.setName(topicDTO.getName());
@@ -83,7 +66,7 @@ public class TopicController {
     }
 
     @PutMapping("/{id}")
-    public TopicDTO updateTopic(@PathVariable Long id, @RequestBody TopicDTO topicDTO){
+    public TopicDTO updateTopic(@PathVariable Long id, @RequestBody TopicDTO topicDTO) {
         Optional<Topic> topicOptional = courseService.getTopicByID(id);
         if (topicOptional.isPresent()) {
             Topic topic = topicOptional.get();
@@ -97,7 +80,7 @@ public class TopicController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTopic(@PathVariable Long id){
+    public void deleteTopic(@PathVariable Long id) {
         Optional<Topic> topicOptional = courseService.getTopicByID(id);
         if (topicOptional.isPresent()) {
             courseService.deleteTopicById(id);
@@ -106,13 +89,13 @@ public class TopicController {
         }
     }
 
-    private TopicDTO convertToDTO(Topic topic){
+    private TopicDTO convertToDTO(Topic topic) {
         TopicDTO topicDTO = new TopicDTO();
         topicDTO.setId(topic.getId());
         topicDTO.setName(topic.getName());
         topicDTO.setContent(topic.getContent());
 
-        if (topic.getLesson() != null && topic.getLesson().getId() != null){
+        if (topic.getLesson() != null && topic.getLesson().getId() != null) {
             topicDTO.setLessonId(topic.getId());
         } else {
             topicDTO.setLessonId(null);

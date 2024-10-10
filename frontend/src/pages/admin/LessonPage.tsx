@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useParams /*, useNavigate*/ } from 'react-router-dom';
+import CourseService from '../../services/CourseService';
 import LessonService from '../../services/LessonService';
+import { Course } from '../../model/Course';
 import { Lesson } from '../../model/Lesson';
 import ConfirmDialog from '../../components/ConfirmDialog'; // Adjust the path accordingly
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faBook } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
 const LessonPage: React.FC = () => {
-  const { courseId } = useParams<{ courseId: string }>();
-  /*const navigate = useNavigate();*/
+  const navigate = useNavigate();
 
+  const { courseId } = useParams<{ courseId: string }>();
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [course, setCourse] = useState<Course>();
   const [selectedLesson, setSelectedLesson] = useState<Partial<Lesson> | null>(null);
   const [isModalActive, setModalActive] = useState(false);
   const [isConfirmDelete, setIsConfirmDelete] = useState(false);
   const [lessonToDelete, setLessonToDelete] = useState<Lesson | null>(null);
 
   useEffect(() => {
+    fetchCourse();
     fetchLessons();
   }, [courseId]);
 
@@ -24,6 +29,12 @@ const LessonPage: React.FC = () => {
     const numericCourseId = Number(courseId);
     const data = await LessonService.getLessonsByCourseId(numericCourseId);
     setLessons(data);
+  };
+
+  const fetchCourse = async () => {
+    const numericCourseId = Number(courseId);
+    const data = await CourseService.getCourseById(numericCourseId);
+    setCourse(data);
   };
 
   const openModal = (lesson?: Lesson) => {
@@ -74,9 +85,13 @@ const LessonPage: React.FC = () => {
 
   return (
     <div className="container">
-      <h1 className="title">Lessons for Course {courseId}</h1>
-      <button className="button is-primary" onClick={() => openModal()}>Add Lesson</button>
-
+      <h1 className="title">{course ? course.name : ''} Lessons</h1>
+      <div className="buttons">
+        <button className="button is-primary" onClick={() => openModal()}>Add Lesson</button>
+        <div className="has-text-right" style={{ marginLeft: 'auto' }}>
+          <button className="button is-light" onClick={() => navigate(`/admin-course`)}>Back</button>
+        </div>
+      </div>
       <table className="table is-fullwidth mt-4">
         <thead>
           <tr>
@@ -96,6 +111,9 @@ const LessonPage: React.FC = () => {
                 </button>
                 <button className="button is-small is-danger" onClick={() => requestDeleteLesson(lesson)} title="Delete">
                   <FontAwesomeIcon icon={faTrash} />
+                </button>
+                <button className="button is-small is-primary" onClick={() => navigate(`/admin-course/${lesson.courseId}/lessons/${lesson.id}/topics`)} title="Lessons">
+                  <FontAwesomeIcon icon={faBook} />
                 </button>
               </td>
             </tr>
