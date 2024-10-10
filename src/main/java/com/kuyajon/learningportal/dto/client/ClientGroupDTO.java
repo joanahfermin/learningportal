@@ -7,7 +7,4 @@ public class ClientGroupDTO {
     private Long id;
     private String name;
     private String description;
-
-    private Long clientId;
-    private Long groupId;
 }

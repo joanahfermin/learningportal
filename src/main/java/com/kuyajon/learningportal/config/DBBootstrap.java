@@ -10,12 +10,16 @@ import com.kuyajon.learningportal.repository.course.LessonRepository;
 import com.kuyajon.learningportal.repository.course.QuestionRepository;
 import com.kuyajon.learningportal.repository.course.TestRepository;
 import com.kuyajon.learningportal.repository.course.TopicRepository;
+import com.kuyajon.learningportal.repository.client.ClientRepository;
+import com.kuyajon.learningportal.repository.client.ClientGroupRepository;
 import com.kuyajon.learningportal.model.course.AnswerChoice;
 import com.kuyajon.learningportal.model.course.Course;
 import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Question;
 import com.kuyajon.learningportal.model.course.Test;
 import com.kuyajon.learningportal.model.course.Topic;
+import com.kuyajon.learningportal.model.client.Client;
+import com.kuyajon.learningportal.model.client.ClientGroup;
 import com.kuyajon.learningportal.model.sys.ERole;
 import com.kuyajon.learningportal.model.sys.User;
 import com.kuyajon.learningportal.repository.sys.UserRepository;
@@ -54,6 +58,12 @@ public class DBBootstrap {
     private QuestionRepository questionRepository;
 
     @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private ClientGroupRepository clientGroupRepository;
+
+    @Autowired
     private ProfileConfig profileConfig;
 
     @EventListener(ApplicationReadyEvent.class)
@@ -69,6 +79,7 @@ public class DBBootstrap {
         LOG.info("Creating Initial Data for DEV");
         createDevUsers();
         createDevCourses();
+        createClientGroups();
         LOG.info("Creating Initial Data for DEV - Done");
     }
 
@@ -108,7 +119,7 @@ public class DBBootstrap {
                         topic.setLesson(lesson);
                         topicRepository.save(topic);
                         createTestObject(null, topic);
-                    }    
+                    }
                 }
             }
         }
@@ -120,8 +131,8 @@ public class DBBootstrap {
         test.setLesson(lesson);
         test.setTopic(topic);
         testRepository.save(test);
-        
-        for (int q=0; q<5; q++) {
+
+        for (int q = 0; q < 5; q++) {
             Question question = new Question();
             question.setQuestionText("What is?");
             question.setChoiceA("Is it A");
@@ -133,5 +144,19 @@ public class DBBootstrap {
             question.setTest(test);
             questionRepository.save(question);
         }
+    }
+
+    private void createClientGroups() {
+        if (clientGroupRepository.count() == 0) {
+            ClientGroup grp1 = new ClientGroup();
+            grp1.setName("Grp1");
+            grp1.setDescription("Test");
+            clientGroupRepository.save(grp1);
+            ClientGroup grp2 = new ClientGroup();
+            grp2.setName("Grp1");
+            grp2.setDescription("Test");
+            clientGroupRepository.save(grp2);
+        }
+
     }
 }

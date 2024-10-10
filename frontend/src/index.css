@@ -50,7 +50,8 @@ body,
 
 /* Ensure the navbar background is consistent and text is visible */
 .navbar,
-.navbar-menu {
+.navbar-menu,
+.navbar-dropdown {
   background-color: #337ab7 !important;
   /* Apply the background color to both navbar and menu */
   color: white;
@@ -72,7 +73,7 @@ body,
 .navbar-item:hover,
 .navbar-link:hover {
   background-color: transparent;
-  color: #ddd !important;
+  color: #ffff00 !important;
 }
 
 .navbar-burger {

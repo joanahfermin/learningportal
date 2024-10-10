@@ -5,7 +5,7 @@ import { useAuth } from "./Auth/AuthContext";
 const NavBar: React.FC = () => {
   const [isActive, setIsActive] = React.useState(false);
   const { role, logout } = useAuth();
-  
+
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="container">
@@ -31,19 +31,26 @@ const NavBar: React.FC = () => {
           className={`navbar-menu ${isActive ? "is-active" : ""}`}
         >
           <div className="navbar-end">
-              {role === "ADMIN" && (
-                <>
-                  <Link className="navbar-item" to="/admin-course">Course</Link>
-                  <Link className="navbar-item" to="/admin-client">Client</Link>
-                </>
-              )}
-              {role === "CLIENT" && (
-                <>
-                  <Link className="navbar-item" to="/client-home">Home</Link>
-                  <Link className="navbar-item" to="/client-learnings">Learnings</Link>
-                </>
-              )}
-              <a  className="navbar-item" onClick={logout}>Logout</a>
+            {role === "ADMIN" && (
+              <>
+                <Link className="navbar-item" to="/admin-course">Course</Link>
+                <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">Client</a>
+                  <ul className="navbar-dropdown">
+                    <Link className="navbar-item" to="/admin-client">Client</Link>
+                    <Link className="navbar-item" to="/admin-client-group">Client Group</Link>
+                  </ul>
+                </div>
+
+              </>
+            )}
+            {role === "CLIENT" && (
+              <>
+                <Link className="navbar-item" to="/client-home">Home</Link>
+                <Link className="navbar-item" to="/client-learnings">Learnings</Link>
+              </>
+            )}
+            <a className="navbar-item" onClick={logout}>Logout</a>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ public class Client {
     @EqualsAndHashCode.Exclude
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;  // Link to the User entity for login
+    private User user; // Link to the User entity for login
 
     @Column(nullable = false)
     private String firstName;
@@ -29,10 +29,6 @@ public class Client {
 
     @EqualsAndHashCode.Exclude
     @ManyToMany
-    @JoinTable(
-            name = "client_groups",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
-    private Set<ClientGroup> groups = new HashSet<>();  // Many-to-many relationship with ClientGroup
+    @JoinTable(name = "client_group_memberships", joinColumns = @JoinColumn(name = "client_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<ClientGroup> groups = new HashSet<>(); // Many-to-many relationship with ClientGroup
 }
