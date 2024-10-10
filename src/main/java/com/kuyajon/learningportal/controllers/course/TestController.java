@@ -31,14 +31,15 @@ public class TestController {
 
     @GetMapping
     public List<TestDTO> getAllTest() {
-        List<Test> tests = courseService.getAllTest();
-        List<TestDTO> result = new ArrayList<TestDTO>();
+        // List<Test> tests = courseService.getAllTest();
+        // List<TestDTO> result = new ArrayList<TestDTO>();
 
-        for (Test test : tests) {
-            TestDTO testDTO = convertToDTO(test);
-            result.add(testDTO);
-        }
-        return result;
+        // for (Test test : tests) {
+        // TestDTO testDTO = convertToDTO(test);
+        // result.add(testDTO);
+        // }
+        // return result;
+        return null;
     }
 
     @GetMapping("/{id}")

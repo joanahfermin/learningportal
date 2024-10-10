@@ -2,6 +2,7 @@ package com.kuyajon.learningportal.service;
 
 import com.kuyajon.learningportal.dto.course.CourseDTO;
 import com.kuyajon.learningportal.dto.course.LessonDTO;
+import com.kuyajon.learningportal.dto.course.TopicDTO;
 import com.kuyajon.learningportal.model.client.*;
 import com.kuyajon.learningportal.model.course.*;
 import com.kuyajon.learningportal.repository.course.*;
@@ -42,21 +43,21 @@ public class CourseService {
 
     }
 
-    public List<Lesson> getAllLesson() {
-        return lessonRepository.findAll();
-    }
+    // public List<Lesson> getAllLesson() {
+    // return lessonRepository.findAll();
+    // }
 
-    public List<Question> getAllQuestion() {
-        return questionRepository.findAll();
-    }
+    // public List<Question> getAllQuestion() {
+    // return questionRepository.findAll();
+    // }
 
-    public List<Test> getAllTest() {
-        return testRepository.findAll();
-    }
+    // public List<Test> getAllTest() {
+    // return testRepository.findAll();
+    // }
 
-    public List<Topic> getAllTopic() {
-        return topicRepository.findAll();
-    }
+    // public List<Topic> getAllTopic() {
+    // return topicRepository.findAll();
+    // }
 
     // Retrieve course by id.
     public Optional<CourseDTO> getCourseByID(Long id) {
@@ -89,8 +90,16 @@ public class CourseService {
         return Optional.of(testRepository.findById(id).get());
     }
 
-    public Optional<Topic> getTopicByID(Long id) {
-        return Optional.of(topicRepository.findById(id).get());
+    public Optional<TopicDTO> getTopicByID(Long id) {
+        Optional<Topic> topicOptional = topicRepository.findById(id);
+        if (topicOptional.isPresent()) {
+            Topic topic = topicOptional.get();
+            TopicDTO result = convertToDTO(topic);
+            return Optional.of(result);
+        } else {
+            return Optional.empty();
+        }
+
     }
 
     // Save or update course obj.
@@ -114,8 +123,10 @@ public class CourseService {
         return testRepository.save(test);
     }
 
-    public Topic saveOrUpdateTopic(Topic topic) {
-        return topicRepository.save(topic);
+    public TopicDTO saveOrUpdateTopic(TopicDTO topicDTO) {
+        Topic topic = convertToEntity(topicDTO);
+        topicRepository.save(topic);
+        return convertToDTO(topic);
     }
 
     // Delete client obj.
@@ -162,8 +173,15 @@ public class CourseService {
         return testRepository.findTestByTopicId(topicId);
     }
 
-    public List<Topic> getTopicByLessonId(Long lessonId) {
-        return topicRepository.findTopicByLessonId(lessonId);
+    public List<TopicDTO> getTopicsByLessonId(Long lessonId) {
+        List<Topic> topics = topicRepository.findTopicByLessonId(lessonId);
+        List<TopicDTO> result = new ArrayList<TopicDTO>();
+
+        for (Topic topic : topics) {
+            TopicDTO dto = convertToDTO(topic);
+            result.add(dto);
+        }
+        return result;
     }
 
     private CourseDTO convertToDTO(Course course) {
@@ -214,6 +232,36 @@ public class CourseService {
         lesson.setName(lessonDTO.getName());
         lesson.setDescription(lessonDTO.getDescription());
         return lesson;
+    }
+
+    private TopicDTO convertToDTO(Topic topic) {
+        TopicDTO topicDTO = new TopicDTO();
+        topicDTO.setId(topic.getId());
+        topicDTO.setName(topic.getName());
+        topicDTO.setContent(topic.getContent());
+
+        if (topic.getLesson() != null && topic.getLesson().getId() != null) {
+            topicDTO.setLessonId(topic.getId());
+        } else {
+            topicDTO.setLessonId(null);
+        }
+        return topicDTO;
+    }
+
+    private Topic convertToEntity(TopicDTO topicDTO) {
+        Topic topic;
+        if (topicDTO.getId() == null || topicDTO.getId().longValue() == 0) {
+            topic = new Topic();
+            Optional<Lesson> lessonOptional = lessonRepository.findById(topicDTO.getLessonId());
+            if (lessonOptional.isPresent()) {
+                topic.setLesson(lessonOptional.get());
+            }
+        } else {
+            topic = topicRepository.getReferenceById(topicDTO.getId());
+        }
+        topic.setName(topicDTO.getName());
+        topic.setContent(topicDTO.getContent());
+        return topic;
     }
 
 }

@@ -24,19 +24,20 @@ public class QuestionController {
     private CourseService courseService;
 
     @GetMapping
-    public List<QuestionDTO> getAllQuestions (){
-        List<Question> questions = courseService.getAllQuestion();
-        List<QuestionDTO> result = new ArrayList<QuestionDTO>();
+    public List<QuestionDTO> getAllQuestions() {
+        // List<Question> questions = courseService.getAllQuestion();
+        // List<QuestionDTO> result = new ArrayList<QuestionDTO>();
 
-        for (Question question : questions){
-            QuestionDTO questionDTO = convertToDTO(question);
-            result.add(questionDTO);
-        }
-        return result;
+        // for (Question question : questions){
+        // QuestionDTO questionDTO = convertToDTO(question);
+        // result.add(questionDTO);
+        // }
+        // return result;
+        return null;
     }
 
     @GetMapping("/{id}")
-    public Optional<QuestionDTO> getQuestionById (@PathVariable Long id){
+    public Optional<QuestionDTO> getQuestionById(@PathVariable Long id) {
         Optional<Question> optionalQuestion = courseService.getQuestionByID(id);
 
         if (optionalQuestion.isPresent()) {
@@ -49,7 +50,7 @@ public class QuestionController {
     }
 
     @GetMapping("/test/{testId}")
-    public List<QuestionDTO> getAllQuestionsByTestId (@PathVariable Long testId){
+    public List<QuestionDTO> getAllQuestionsByTestId(@PathVariable Long testId) {
         List<Question> questions = courseService.getQuestionsByTestId(testId);
         List<QuestionDTO> result = new ArrayList<QuestionDTO>();
 
@@ -57,7 +58,7 @@ public class QuestionController {
             throw new IllegalArgumentException("Question ID must not be null");
         }
 
-        for (Question question : questions){
+        for (Question question : questions) {
             QuestionDTO questionDTO = convertToDTO(question);
             result.add(questionDTO);
         }
@@ -65,7 +66,7 @@ public class QuestionController {
     }
 
     @PostMapping("/test/{testId}")
-    public QuestionDTO createQuestion(@RequestBody QuestionDTO questionDTO){
+    public QuestionDTO createQuestion(@RequestBody QuestionDTO questionDTO) {
         Optional<Test> testOptional = courseService.getTestByID(questionDTO.getTestId());
 
         Test retrievedTest = testOptional.get();
@@ -85,7 +86,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public QuestionDTO updateQuestion(@PathVariable Long id, @RequestBody QuestionDTO questionDTO){
+    public QuestionDTO updateQuestion(@PathVariable Long id, @RequestBody QuestionDTO questionDTO) {
         Optional<Question> questionOptional = courseService.getQuestionByID(id);
 
         if (questionOptional.isPresent()) {
@@ -105,7 +106,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteQuestion(@PathVariable Long id){
+    public void deleteQuestion(@PathVariable Long id) {
         Optional<Question> questionOptional = courseService.getQuestionByID(id);
         if (questionOptional.isPresent()) {
             courseService.deleteQuestionById(id);
@@ -114,7 +115,7 @@ public class QuestionController {
         }
     }
 
-    private QuestionDTO convertToDTO(Question question){
+    private QuestionDTO convertToDTO(Question question) {
         QuestionDTO questionDTO = new QuestionDTO();
         questionDTO.setId(question.getId());
         questionDTO.setAnswer(String.valueOf(question.getAnswer()));
@@ -124,7 +125,7 @@ public class QuestionController {
         questionDTO.setChoiceD(question.getChoiceD());
         questionDTO.setQuestionText(question.getQuestionText());
         questionDTO.setSolution(question.getSolution());
-//        questionDTO.setTestId(question.getTest().getId());
+        // questionDTO.setTestId(question.getTest().getId());
 
         if (question.getTest() != null && question.getTest().getId() != null) {
             questionDTO.setTestId(question.getTest().getId());

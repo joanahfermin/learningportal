@@ -1,5 +1,6 @@
 package com.kuyajon.learningportal.controllers.course;
 
+import com.kuyajon.learningportal.dto.course.LessonDTO;
 import com.kuyajon.learningportal.dto.course.TopicDTO;
 import com.kuyajon.learningportal.model.course.Lesson;
 import com.kuyajon.learningportal.model.course.Topic;
@@ -25,64 +26,29 @@ public class TopicController {
 
     @GetMapping("/{id}")
     public Optional<TopicDTO> getTopicById(@PathVariable Long id) {
-        Optional<Topic> topicOptional = courseService.getTopicByID(id);
-
-        if (topicOptional.isPresent()) {
-            Topic topic = topicOptional.get();
-            TopicDTO topicDTO = convertToDTO(topic);
-            return Optional.of(topicDTO);
-        } else {
-            throw new IllegalArgumentException("Topic ID must not be null");
-        }
+        return courseService.getTopicByID(id);
     }
 
     @GetMapping
     public List<TopicDTO> getAllTopicByLessonId(@PathVariable Long lessonId) {
-        List<Topic> topics = courseService.getTopicByLessonId(lessonId);
-        List<TopicDTO> result = new ArrayList<TopicDTO>();
-
-        for (Topic topic : topics) {
-            TopicDTO topicDTO = convertToDTO(topic);
-            result.add(topicDTO);
-        }
-        return result;
+        return courseService.getTopicsByLessonId(lessonId);
     }
 
     @PostMapping()
     public TopicDTO createTopic(@PathVariable Long lessonId, @RequestBody TopicDTO topicDTO) {
-        return null;
-        // Optional<Lesson> lessonOptional = courseService.getLessonByID(lessonId);
-
-        // if (lessonOptional.isPresent()) {
-        // Lesson lesson = lessonOptional.get();
-        // Topic topic = new Topic();
-        // topic.setName(topicDTO.getName());
-        // topic.setContent(topicDTO.getContent());
-        // topic.setLesson(lesson);
-        // Topic topicSaved = courseService.saveOrUpdateTopic(topic);
-        // return convertToDTO(topicSaved);
-        // } else {
-        // throw new IllegalArgumentException("Lesson ID must not be null");
-        // }
+        topicDTO.setLessonId(lessonId);
+        return courseService.saveOrUpdateTopic(topicDTO);
     }
 
     @PutMapping("/{id}")
     public TopicDTO updateTopic(@PathVariable Long id, @RequestBody TopicDTO topicDTO) {
-        Optional<Topic> topicOptional = courseService.getTopicByID(id);
-        if (topicOptional.isPresent()) {
-            Topic topic = topicOptional.get();
-            topic.setContent(topicDTO.getContent());
-            topic.setName(topicDTO.getName());
-            topic = courseService.saveOrUpdateTopic(topic);
-            return convertToDTO(topic);
-        } else {
-            throw new IllegalArgumentException("Topic ID must not be null");
-        }
+        topicDTO.setId(id);
+        return courseService.saveOrUpdateTopic(topicDTO);
     }
 
     @DeleteMapping("/{id}")
     public void deleteTopic(@PathVariable Long id) {
-        Optional<Topic> topicOptional = courseService.getTopicByID(id);
+        Optional<TopicDTO> topicOptional = courseService.getTopicByID(id);
         if (topicOptional.isPresent()) {
             courseService.deleteTopicById(id);
         } else {
@@ -90,17 +56,4 @@ public class TopicController {
         }
     }
 
-    private TopicDTO convertToDTO(Topic topic) {
-        TopicDTO topicDTO = new TopicDTO();
-        topicDTO.setId(topic.getId());
-        topicDTO.setName(topic.getName());
-        topicDTO.setContent(topic.getContent());
-
-        if (topic.getLesson() != null && topic.getLesson().getId() != null) {
-            topicDTO.setLessonId(topic.getId());
-        } else {
-            topicDTO.setLessonId(null);
-        }
-        return topicDTO;
-    }
 }
