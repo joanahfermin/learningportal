@@ -1,5 +1,5 @@
 import axiosInstance from "../api/axiosConfig";
-import { Course } from "../model/Course";
+import { Course } from "../model/Models";
 
 class CourseService {
   // Fetch all courses

@@ -1,5 +1,5 @@
 import axiosInstance from "../api/axiosConfig";
-import { Topic } from "../model/Topic";
+import { Topic } from "../model/Models";
 
 // Service for interacting with the topic API
 const TopicService = {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CourseService from '../../services/CourseService';
-import { Course } from '../..//model/Course';
+import { Course } from '../..//model/Models';
 import ConfirmDialog from '../../components/ConfirmDialog'; // Update the path as needed
 import { useNavigate } from 'react-router-dom';
 

@@ -1,5 +1,5 @@
 import axiosInstance from "../api/axiosConfig";
-import { Lesson } from "../model/Lesson";
+import { Lesson } from "../model/Models";
 
 // Service for interacting with the lesson API
 const LessonService = {

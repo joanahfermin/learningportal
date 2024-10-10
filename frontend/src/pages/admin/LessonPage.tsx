@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams /*, useNavigate*/ } from 'react-router-dom';
 import CourseService from '../../services/CourseService';
 import LessonService from '../../services/LessonService';
-import { Course } from '../../model/Course';
-import { Lesson } from '../../model/Lesson';
+import { Lesson, Course } from '../../model/Models';
 import ConfirmDialog from '../../components/ConfirmDialog'; // Adjust the path accordingly
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faBook } from '@fortawesome/free-solid-svg-icons';
