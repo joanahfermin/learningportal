@@ -31,7 +31,7 @@ public class ClientController {
 
     //createClient
     //updateClient - done
-    //deleteClient
+    //deleteClient - done
 
     @GetMapping
     public List<ClientDTO> getAllClients(){
@@ -77,6 +77,17 @@ public class ClientController {
             return convertToDTO(client);
         } else {
             throw new IllegalArgumentException("Client ID must not be null");
+        }
+    }
+
+    @DeleteMapping
+    public void deleteClient(@PathVariable Long id){
+        Optional<Client> optionalClient = clientService.getClientByID(id);
+
+        if (optionalClient.isPresent()){
+            clientService.deleteClientById(id);
+        } else {
+            throw new IllegalArgumentException("No client ID found.");
         }
     }
 

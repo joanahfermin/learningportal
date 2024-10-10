@@ -32,6 +32,11 @@ public class ClientService {
     private TopicProgressRepository topicProgressRepository;
 
 
+    //Retrieve all data.
+    public List<ClientGroup> getAllClientGroup(){
+        return clientGroupRepository.findAll();
+    }
+
 
     //Retrieve client by id.
     public Optional<Client> getClientByID(Long id){
